@@ -1,0 +1,38 @@
+<p>
+  Все ингредиенты
+</p>
+
+<table >
+  <thead>
+  <tr>
+    <!--    <th *ngFor="let head of headElements" scope="col">{{head}} </th>-->
+    <th>id</th> <th>Наименование</th> <th> Ед.Измер</th><th>Партии</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr  *ngFor="let el of ingredients">
+    <td>{{el.id}}</td>
+    <td>{{el.name}}</td>
+    <td>{{el.measure}}</td>
+
+    <td >
+      <table>
+        <thead>
+        <tr><th>id партии</th> <th>Кол-во</th> <th>Годна до</th></tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let part of el.parts">
+          <td>  {{part.id}}</td> <td> {{part.value}}</td> <td> {{part.expirationDate}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+  </tbody>
+</table>
+{{newIngredient.name}}
+<form  name="form1">
+  <input type="text" placeholder="Наименование ингредиента" [(ngModel)]="newIngredient.name" name="name">
+  <input type="text" placeholder="Единица измерения" [(ngModel)]="newIngredient.measure" name="measure">
+  <button (click)="createIng()">Добавить ингредиент </button>
+</form>

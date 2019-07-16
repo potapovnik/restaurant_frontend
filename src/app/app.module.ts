@@ -5,36 +5,25 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { UsersComponent } from './users/users.component';
 import {HttpClientModule} from '@angular/common/http';
-import {
-  MatButtonModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatListModule,
-  MatOptionModule,
-  MatSelectModule,
-  MatToolbarModule
-} from '@angular/material';
+import {MatButtonModule, MatToolbarModule} from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { IngredientsComponent } from './ingredients/ingredients.component';
 import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
-    UsersComponent
+    UsersComponent,
+    IngredientsComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     MatButtonModule,
+    BrowserAnimationsModule,
     MatToolbarModule,
-    MatListModule,
-    MatFormFieldModule,
-    MatInputModule,
-    FormsModule,
-    MatSelectModule,
-    MatOptionModule,
-    BrowserAnimationsModule
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
