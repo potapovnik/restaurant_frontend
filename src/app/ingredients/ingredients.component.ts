@@ -24,6 +24,7 @@ export class IngredientsComponent implements OnInit {
   }
   createIngPart(ingId: number) {
     this.newIngredientPart.ingredientId = ingId;
+    this.newIngredientPart.id = undefined;
     this.ingredientService.createIngredientPart(this.newIngredientPart);
   }
   deleteIngredient(id: number) {

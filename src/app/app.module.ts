@@ -9,12 +9,14 @@ import {MatButtonModule, MatToolbarModule} from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { IngredientsComponent } from './ingredients/ingredients.component';
 import {FormsModule} from '@angular/forms';
+import { DishesComponent } from './dishes/dishes.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     UsersComponent,
-    IngredientsComponent
+    IngredientsComponent,
+    DishesComponent
   ],
   imports: [
     BrowserModule,
