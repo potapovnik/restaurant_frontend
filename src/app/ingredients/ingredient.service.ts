@@ -2,12 +2,15 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Ingredient} from './Ingredient';
+import {IngredientPart} from './IngredientPart';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IngredientService {
-  private path = '/restaurant/ingredients';
+  private ingredientsPath = '/restaurant/ingredients';
+  private ingredientPartsPath = '/restaurant/ingredientparts';
+
   private url: string;
   private idEvent: number;
 
@@ -15,14 +18,17 @@ export class IngredientService {
   }
 
   getAllIngredients(): Observable<Ingredient[]> {
-    const url = this.path;
-    console.log('geturl ' + url);
-    return this.http.get<Ingredient[]>(url);
+    return this.http.get<Ingredient[]>(this.ingredientsPath);
   }
   createIngredient(ing: Ingredient) {
-    const myHeaders  = new HttpHeaders().set('responseType', 'json');
-    const url = this.path
-    console.log(url, JSON.stringify(ing));
-    this.http.post(url, JSON.stringify(ing), {headers: myHeaders}).subscribe(); // responseType = 'json'
+    const myHeaders  = new HttpHeaders().set('Content-Type', 'application/json');
+    this.http.post(this.ingredientsPath, JSON.stringify(ing), {headers: myHeaders}).subscribe();
+  }
+  createIngredientPart(ingPart: IngredientPart) {
+    const myHeaders  = new HttpHeaders().set('Content-Type', 'application/json');
+    this.http.post(this.ingredientPartsPath, JSON.stringify(ingPart), {headers: myHeaders}).subscribe();
+  }
+  deleteIngredient(ingId: number) {
+    this.http.delete(this.ingredientsPath + String(ingId)).subscribe();
   }
 }

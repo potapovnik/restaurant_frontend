@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Ingredient} from './Ingredient';
 import {IngredientService} from './ingredient.service';
+import {IngredientPart} from './IngredientPart';
 
 
 @Component({
@@ -11,6 +12,7 @@ import {IngredientService} from './ingredient.service';
 export class IngredientsComponent implements OnInit {
   ingredients: Ingredient[];
   newIngredient: Ingredient = new Ingredient();
+  newIngredientPart: IngredientPart = new IngredientPart();
   constructor(private ingredientService: IngredientService) { }
 
   ngOnInit() {
@@ -19,5 +21,20 @@ export class IngredientsComponent implements OnInit {
 
   createIng() {
     this.ingredientService.createIngredient(this.newIngredient);
+  }
+  createIngPart(ingId: number) {
+    this.newIngredientPart.ingredientId = ingId;
+    this.ingredientService.createIngredientPart(this.newIngredientPart);
+  }
+  deleteIngredient(id: number) {
+    let name: string;
+    for (let i = 0; i < this.ingredients.length; i++) {
+      if (this.ingredients[i].id === id) {
+        name = this.ingredients[i].name;
+      }
+    }
+    if (confirm('Вы точно хотите удалить ингредиент ' + name + ' и все его партии?')) {
+      this.ingredientService.deleteIngredient(id);
+    }
   }
 }

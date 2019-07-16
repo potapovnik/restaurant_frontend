@@ -6,7 +6,7 @@
   <thead>
   <tr>
     <!--    <th *ngFor="let head of headElements" scope="col">{{head}} </th>-->
-    <th>id</th> <th>Наименование</th> <th> Ед.Измер</th><th>Партии</th>
+    <th>id</th> <th>Наименование</th> <th> Ед.Измер</th><th>Удалить</th><th>Партии</th>
   </tr>
   </thead>
   <tbody>
@@ -14,6 +14,7 @@
     <td>{{el.id}}</td>
     <td>{{el.name}}</td>
     <td>{{el.measure}}</td>
+    <td><button (click)="deleteIngredient(el.id)">удалить</button></td>
 
     <td >
       <table>
@@ -23,6 +24,12 @@
         <tbody>
         <tr *ngFor="let part of el.parts">
           <td>  {{part.id}}</td> <td> {{part.value}}</td> <td> {{part.expirationDate}}</td>
+        </tr>
+        <tr>
+          <td colspan="3"> <input type="text" placeholder="Количество" [(ngModel)]="newIngredientPart.value">
+            <input type="date" [(ngModel)]="newIngredientPart.expirationDate" >
+            <button (click)="createIngPart(el.id)" > Добавить</button>
+          </td>
         </tr>
         </tbody>
       </table>
