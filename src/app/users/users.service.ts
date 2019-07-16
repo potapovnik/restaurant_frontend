@@ -8,8 +8,6 @@ import {Users} from './users';
 })
 export class UsersService {
   private users = '/restaurant/users';
-  private url: string;
-  private idEvent: number;
 
   constructor(private http: HttpClient) {
   }

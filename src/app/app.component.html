@@ -1,9 +1,16 @@
 <!--The content below is only a placeholder and can be replaced.-->
 
-<a  [routerLink]="'/users'">
+<mat-toolbar color="primary">
+  <div >
+    <a mat-button [routerLink]="'/users'">
+      users
+    </a>
+  </div>
 
-  Messages
-</a>
+  <div *ngIf="isAdmin()">
+
+  </div>
 
 
-<router-outlet></router-outlet>
+</mat-toolbar>
+  <router-outlet></router-outlet>
