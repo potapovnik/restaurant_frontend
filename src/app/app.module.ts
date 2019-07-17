@@ -6,10 +6,21 @@ import { AppComponent } from './app.component';
 import { UsersComponent } from './users/users.component';
 import {HttpClientModule} from '@angular/common/http';
 import {MatButtonModule, MatToolbarModule} from '@angular/material';
+import {
+  MatButtonModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatListModule,
+  MatOptionModule,
+  MatSelectModule,
+  MatToolbarModule
+} from '@angular/material';
+import {MatButtonModule, MatToolbarModule} from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { IngredientsComponent } from './ingredients/ingredients.component';
 import {FormsModule} from '@angular/forms';
 import { DishesComponent } from './dishes/dishes.component';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -22,9 +33,14 @@ import { DishesComponent } from './dishes/dishes.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    MatButtonModule,
-    BrowserAnimationsModule,
     MatToolbarModule,
+    MatListModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatOptionModule,
+    BrowserAnimationsModule,
+    BrowserAnimationsModule,
     FormsModule
   ],
   providers: [],
