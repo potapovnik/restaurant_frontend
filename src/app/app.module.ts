@@ -5,22 +5,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { UsersComponent } from './users/users.component';
 import {HttpClientModule} from '@angular/common/http';
-import {MatButtonModule, MatToolbarModule} from '@angular/material';
-import {
-  MatButtonModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatListModule,
-  MatOptionModule,
-  MatSelectModule,
-  MatToolbarModule
-} from '@angular/material';
-import {MatButtonModule, MatToolbarModule} from '@angular/material';
+import {MatButtonModule, MatToolbarModule, MatListModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatOptionModule  } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { IngredientsComponent } from './ingredients/ingredients.component';
 import {FormsModule} from '@angular/forms';
 import { DishesComponent } from './dishes/dishes.component';
-import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -41,7 +30,8 @@ import {FormsModule} from '@angular/forms';
     MatOptionModule,
     BrowserAnimationsModule,
     BrowserAnimationsModule,
-    FormsModule
+    FormsModule,
+    MatButtonModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
