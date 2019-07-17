@@ -9,6 +9,18 @@
     <td>{{el.type}}</td>
     <td>{{el.cost}}</td>
     <td> <input type="checkbox" [checked]="el.ismenu" ></td>
+    <td> <table>
+      <tr *ngFor="let consist of el.values; let i = index"><td>{{el.ingredients[i].name}}</td><td>{{el.values[i]}}</td><td>{{el.ingredients[i].measure}}</td></tr>
+    </table>
+    </td>
+  </tr>
 
+<!--  добавить блюдо-->
+  <tr><td colspan="6">
+    <input type="text" placeholder="Название" [(ngModel)]="newDish.name">
+    <input type="text" placeholder="Тип" maxlength="10" [(ngModel)]="newDish.type">
+    <input type="number" placeholder="Цена" [(ngModel)]="newDish.cost">
+    <label><input type="checkbox" [(ngModel)]="newDish.ismenu" >В меню</label>
+    <button (click)="createDish()">Добавить</button></td>
   </tr>
 </table>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Dish} from './Dish';
 import {DishService} from './dish.service';
 
@@ -9,10 +9,16 @@ import {DishService} from './dish.service';
 })
 export class DishesComponent implements OnInit {
   dishes: Dish[];
-  constructor(private dishesService: DishService) { }
+  newDish: Dish = new Dish();
+
+  constructor(private dishesService: DishService) {
+  }
 
   ngOnInit() {
     this.dishesService.getAllDishes().subscribe((data: Dish[]) => this.dishes = data);
   }
 
+  createDish() {
+    this.dishesService.createDish(this.newDish);
+  }
 }
