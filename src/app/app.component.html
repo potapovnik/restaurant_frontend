@@ -1,14 +1,15 @@
 <!--The content below is only a placeholder and can be replaced.-->
 
-<mat-toolbar color="primary">
+<mat-toolbar class="navigate">
   <div >
     <a mat-button [routerLink]="'/users'">
-      users
+      Пользователи
     </a>
   </div>
-
-  <div *ngIf="isAdmin()">
-
+  <div >
+    <a mat-button [routerLink]="'/orders'">
+      Заказы
+    </a>
   </div>
 
 
