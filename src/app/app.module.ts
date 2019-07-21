@@ -5,18 +5,32 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { UsersComponent } from './users/users.component';
 import {HttpClientModule} from '@angular/common/http';
-import {MatButtonModule, MatToolbarModule, MatListModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatOptionModule  } from '@angular/material';
+import {
+  MatButtonModule,
+  MatToolbarModule,
+  MatListModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatSelectModule,
+  MatOptionModule, MatCardModule, MatExpansionModule,
+} from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { IngredientsComponent } from './ingredients/ingredients.component';
 import {FormsModule} from '@angular/forms';
 import { DishesComponent } from './dishes/dishes.component';
+import { WaiterOrdersComponent } from './waiter-orders/waiter-orders.component';
+import { CookOrdersComponent } from './cook-orders/cook-orders.component';
+import { UtilsComponent } from './utils/utils.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     UsersComponent,
     IngredientsComponent,
-    DishesComponent
+    DishesComponent,
+    WaiterOrdersComponent,
+    CookOrdersComponent,
+    UtilsComponent,
   ],
   imports: [
     BrowserModule,
@@ -32,6 +46,8 @@ import { DishesComponent } from './dishes/dishes.component';
     BrowserAnimationsModule,
     FormsModule,
     MatButtonModule,
+    MatCardModule,
+    MatExpansionModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

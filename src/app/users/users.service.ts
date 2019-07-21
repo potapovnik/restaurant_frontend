@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Users} from './users';
-import {Role} from './role';
+import {Role} from '../utils/role';
 
 @Injectable({
   providedIn: 'root'
@@ -49,4 +49,9 @@ export class UsersService {
     return this.http.get<Role[]>(url);
   }
 
+  getAllCook(): Observable<Users[]> {
+    const url = this.users + '/getAllCook';
+    console.log(url + '- getAllCook');
+    return this.http.get<Users[]>(url);
+  }
 }

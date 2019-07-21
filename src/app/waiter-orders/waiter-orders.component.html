@@ -1,0 +1,63 @@
+<div class="page">
+  <div class="containerDishList">
+    <mat-card class="matCardEvent">
+      <mat-card-header>
+        <mat-card-title style="text-align: center">Список блюд</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="scrollable">
+          <mat-accordion class="allDishes">
+            <mat-expansion-panel *ngFor="let dish of dishList" class="allDishPanel"
+                                 [class.selected]="selectedDish === dish"
+                                 (click)="onSelectedDish(dish)">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{dish.name}}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-form-field>
+                <input matInput required [(ngModel)]="countOfDishInOrder" placeholder=Количество>
+              </mat-form-field>
+              <button mat-raised-button color="primary" (click)="addToOrderDish(dish)">добавить</button>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="windowForCreateOrder">
+
+    <div>Повар: {{choosedCook.name}} {{choosedCook.surname}}</div>
+    <div>Блюда:
+      <ul *ngFor="let dishView of nameCountDishList">
+        <li>{{dishView.name}} - {{dishView.count}} </li>
+      </ul>
+    </div>
+    <mat-form-field>
+      <input matInput required [(ngModel)]="newOrder.comments" placeholder="Комментарий">
+    </mat-form-field>
+    <button mat-button (click)="createOrder()">
+      Создать заказ
+    </button>
+  </div>
+  <div class="containerCookList">
+    <mat-action-list class="listOfCook" *ngFor="let cook of cookList">
+      <div>
+        {{cook.name}} {{cook.surname}}
+        <button mat-list-item (click)="chooseCook(cook)">
+          Выбрать
+        </button>
+      </div>
+    </mat-action-list>
+  </div>
+  <div class="informationOrder">
+
+  </div>
+  <div class="containerOrderList">
+    <mat-action-list class="listOfUsers" *ngFor="let order of myOrders">
+      <button mat-list-item >
+        {{order.id}}} {{order.comment}}
+      </button>
+    </mat-action-list>
+  </div>
+</div>

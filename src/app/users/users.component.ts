@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {UsersService} from './users.service';
 import {Users} from './users';
-import {Role} from './role';
+import {Role} from '../utils/role';
 
 @Component({
   selector: 'app-users',

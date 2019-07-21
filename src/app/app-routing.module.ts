@@ -3,6 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 import {UsersComponent} from './users/users.component';
 import {IngredientsComponent} from './ingredients/ingredients.component';
 import {DishesComponent} from './dishes/dishes.component';
+import {CookOrdersComponent} from './cook-orders/cook-orders.component';
+import {WaiterOrdersComponent} from './waiter-orders/waiter-orders.component';
 
 const routes: Routes = [
   {path: 'users',
@@ -16,7 +18,17 @@ const routes: Routes = [
   {path: 'dishes',
     component: DishesComponent,
 
-  }
+  },
+  {
+    path: 'cookOrders',
+    component: CookOrdersComponent,
+  },
+
+  {
+    path: 'waiterOrders',
+    component: WaiterOrdersComponent,
+  },
+
 ];
 
 @NgModule({
