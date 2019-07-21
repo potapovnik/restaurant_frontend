@@ -1,26 +1,86 @@
-<p>
-  Все блюда
-</p>
-<table>
-  <tr> <th>id</th><th>Название</th><th>Тип</th><th>Цена</th><th>В меню</th><th>Состав</th></tr>
-  <tr *ngFor="let el of dishes">
-    <td> {{el.id}}</td>
-    <td> {{el.name}}</td>
-    <td>{{el.type}}</td>
-    <td>{{el.cost}}</td>
-    <td> <input type="checkbox" [checked]="el.ismenu" ></td>
-    <td> <table>
-      <tr *ngFor="let consist of el.values; let i = index"><td>{{el.ingredients[i].name}}</td><td>{{el.values[i]}}</td><td>{{el.ingredients[i].measure}}</td></tr>
-    </table>
-    </td>
-  </tr>
+<div class="all-ingredients-table-container">
+  <table mat-table [dataSource]="dishes" multiTemplateDataRows matSort matSortActive="id" matSortDisableClear
+         matSortDirection="asc">
+    <caption>Все блюда</caption>
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>ID</th>
+      <td mat-cell *matCellDef="let dish"> {{dish.id}}</td>
+    </ng-container>
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Название</th>
+      <td mat-cell *matCellDef="let dish"> {{dish.name}}</td>
+    </ng-container>
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Тип</th>
+      <td mat-cell *matCellDef="let dish"> {{dish.type}}</td>
+    </ng-container>
+    <ng-container matColumnDef="cost">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Цена</th>
+      <td mat-cell *matCellDef="let dish"> {{dish.cost}}</td>
+    </ng-container>
+    <ng-container matColumnDef="ismenu">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>В меню</th>
+      <td mat-cell *matCellDef="let dish"><input type="checkbox" [checked]="dish.ismenu"></td>
+    </ng-container>
+    <ng-container matColumnDef="consist">
+      <th mat-header-cell *matHeaderCellDef>Состав</th>
+      <td mat-cell *matCellDef="let dish">
+        <table>
+          <tr>
+            <th>Ингредиент</th>
+            <th>Количество</th>
+            <th></th>
+          </tr>
+          <tr *ngFor="let part of dish.consist">
+            <td>{{part.ingredient.name}}</td>
+            <td>{{part.value}}{{part.ingredient.measure}}</td>
+            <td>
+              <button (click)="deleteConsist( part.id.dishId, part.id.ingredientId)" mat-flat-button color="warn">
+                Удалить
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <mat-select placeholder="Ингредиент" [(ngModel)]="newConsist.id.ingredientId">
+                <mat-option *ngFor="let item of ingredients" [value]="item.id">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+              <input matInput type="number" placeholder="Кол-во" [(ngModel)]="newConsist.value">
+              <button mat-stroked-button (click)="createDishConsist(newConsist, dish.id)"> Добавить ингредиент</button>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+  </table>
+  <mat-paginator [length]="resultsLength" showFirstLastButtons [pageSize]='2'
+                 [pageSizeOptions]="[2, 5, 10, 25, 100]"></mat-paginator>
+</div>
 
-<!--  добавить блюдо-->
-  <tr><td colspan="6">
-    <input type="text" placeholder="Название" [(ngModel)]="newDish.name">
-    <input type="text" placeholder="Тип" maxlength="10" [(ngModel)]="newDish.type">
-    <input type="number" placeholder="Цена" [(ngModel)]="newDish.cost">
-    <label><input type="checkbox" [(ngModel)]="newDish.ismenu" >В меню</label>
-    <button (click)="createDish()">Добавить</button></td>
-  </tr>
-</table>
+
+<form name="addDish">
+  <mat-form-field>
+    <input matInput required type="text" placeholder="Название" [(ngModel)]="newDish.name" name="name">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput required type="text" placeholder="Тип" [(ngModel)]="newDish.type" name="type">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput required type="number" placeholder="Цена" [(ngModel)]="newDish.cost" name="cost">
+  </mat-form-field>
+
+  <mat-checkbox [(ngModel)]="newDish.ismenu" name="ismenu">В меню</mat-checkbox>
+
+
+  <!--    <mat-select placeholder="Роль: " [(ngModel)]="newDish.ingredients[0]">-->
+  <!--      <mat-option *ngFor="let el of ingredients" [value]="el">-->
+  <!--        {{el.name}}-->
+  <!--      </mat-option>-->
+  <!--    </mat-select>-->
+
+  <button mat-stroked-button (click)="createDish()">Добавить блюдо</button>
+</form>

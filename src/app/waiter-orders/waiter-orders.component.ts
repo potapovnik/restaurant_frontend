@@ -35,7 +35,7 @@ export class WaiterOrdersComponent implements OnInit {
 
   ngOnInit() {
     this.userService.getAllCook().subscribe(resp => this.cookList = resp);
-    this.dishService.getAllDishes().subscribe(resp => this.dishList = resp);
+    this.dishService.getAllDishes('Id', 'asc', 0, 1000).subscribe(resp => this.dishList = resp);
     this.newOrder = new Orders();
     this.selectedDish = new Dish();
     this.choosedCook = new Users();

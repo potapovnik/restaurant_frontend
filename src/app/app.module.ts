@@ -13,6 +13,8 @@ import {
   MatInputModule,
   MatSelectModule,
   MatOptionModule, MatCardModule, MatExpansionModule,
+  MatTableModule, MatPaginatorModule, MatSortModule,
+  MatDatepickerModule, MatNativeDateModule, MatCheckboxModule
 } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { IngredientsComponent } from './ingredients/ingredients.component';
@@ -21,7 +23,9 @@ import { DishesComponent } from './dishes/dishes.component';
 import { WaiterOrdersComponent } from './waiter-orders/waiter-orders.component';
 import { CookOrdersComponent } from './cook-orders/cook-orders.component';
 import { UtilsComponent } from './utils/utils.component';
-import { AllOrdersComponent } from './all-orders/all-orders.component';
+import {IngredientsReadOnlyComponent} from './ingredients-read-only/ingredients-read.component';
+import {MissingIngredientsComponent} from './missing-ingredients/missing-ingredients.component';
+
 
 @NgModule({
   declarations: [
@@ -32,7 +36,9 @@ import { AllOrdersComponent } from './all-orders/all-orders.component';
     WaiterOrdersComponent,
     CookOrdersComponent,
     UtilsComponent,
-    AllOrdersComponent,
+    IngredientsReadOnlyComponent,
+    MissingIngredientsComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -50,6 +56,12 @@ import { AllOrdersComponent } from './all-orders/all-orders.component';
     MatButtonModule,
     MatCardModule,
     MatExpansionModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatCheckboxModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

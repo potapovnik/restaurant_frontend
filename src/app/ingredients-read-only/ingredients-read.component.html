@@ -14,16 +14,6 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Ед.измерения</th>
       <td mat-cell *matCellDef="let ingredient"> {{ingredient.measure}}</td>
     </ng-container>
-    <ng-container matColumnDef="delete">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let ingredient">
-        <button (click)="deleteIngredient(ingredient.id)" mat-flat-button color="warn"> Удалить</button>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="missing">
-      <th mat-header-cell *matHeaderCellDef> Не хватает</th>
-      <td mat-cell *matCellDef="let ingredient"><input type="checkbox" disabled></td>
-    </ng-container>
 
     <ng-container matColumnDef="expandedDetail">
       <td mat-cell *matCellDef="let ingredient" [attr.colspan]="columnsToDisplay.length">
@@ -39,26 +29,6 @@
               <td>{{part.id}}</td>
               <td>{{part.value}}</td>
               <td>{{part.expirationDate}}</td>
-              <td>
-                <button (click)="deleteIngPart(part.id)" mat-flat-button color="warn">Удалить</button>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="3">
-                <form name="addIngredientPart">
-                  <mat-form-field>
-                    <input matInput required type="text" placeholder="Количество" [(ngModel)]="newIngredientPart.value"
-                           name="value">
-                  </mat-form-field>
-                  <mat-form-field>
-                    <input matInput [matDatepicker]="picker" placeholder="Годна до" required
-                           [(ngModel)]="newIngredientPart.expirationDate" name="date">
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                  </mat-form-field>
-                  <button mat-stroked-button (click)="createIngPart(ingredient.id)"> Добавить</button>
-                </form>
-              </td>
             </tr>
           </table>
         </div>
@@ -75,17 +45,5 @@
   <mat-paginator [length]="resultsLength" showFirstLastButtons [pageSize]='2'
                  [pageSizeOptions]="[2, 5, 10, 25, 100]"></mat-paginator>
 </div>
-<form name="formAddIngredient">
-  <mat-form-field>
-    <input matInput required type="text" placeholder="Наименование ингредиента" [(ngModel)]="newIngredient.name"
-           name="name">
-  </mat-form-field>
-  <mat-form-field>
-    <input matInput required type="text" placeholder="Единица измерения" [(ngModel)]="newIngredient.measure"
-           name="measure">
-  </mat-form-field>
-  <button mat-stroked-button (click)="createIng()">Добавить ингредиент</button>
-</form>
 
 <app-missing-ingredients></app-missing-ingredients>
-
