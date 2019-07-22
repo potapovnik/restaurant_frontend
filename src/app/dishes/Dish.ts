@@ -1,4 +1,5 @@
 import {DishConsist} from './DishConsist';
+import {Ingredient} from '../ingredients/Ingredient';
 
 export class Dish {
   id: number;
@@ -15,4 +16,9 @@ export class DishForDb {
   cost: number;
   type: string;
   consist: DishConsist[];
+}
+
+export interface DishApi {
+  items: Dish[];
+  totalCount: number;
 }

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Dish} from './Dish';
+import {Dish, DishApi} from './Dish';
 import {DishConsist} from './DishConsist';
 
 
@@ -15,9 +15,16 @@ export class DishService {
   constructor(private http: HttpClient) {
   }
 
-  getAllDishes(sort: string, order: string, pageIndex: number, pageSize: number): Observable<Dish[]> {
+  getAllDishes(sort: string, order: string, pageIndex: number, pageSize: number): Observable<DishApi> {
     const myHeaders  = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http.get<Dish[]>(this.dishesPath, {headers: myHeaders});
+    return this.http.get<DishApi>(
+      this.dishesPath + '?pageIndex=' + pageIndex + '&sortedBy=' + sort + '&pageSize=' + pageSize + '&sortDir=' + order,
+      {headers: myHeaders});
+  }
+
+  getMenuDishes(): Observable<Dish[]> {
+    const myHeaders = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.http.get<Dish[]>(this.dishesPath + '/inmenu', {headers: myHeaders});
   }
 
   createDish(dish: Dish) {
