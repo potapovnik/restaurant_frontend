@@ -12,34 +12,39 @@ export class DishService {
   private dishesPath = '/restaurant/dishes';
   private dishIngredientPath = '/restaurant/dishes/consist';
 
+
   constructor(private http: HttpClient) {
   }
 
-  getAllDishes(sort: string, order: string, pageIndex: number, pageSize: number): Observable<DishApi> {
+  getAllDishes(sort: string, order: string, pageIndex: number, pageSize: number, filter: string): Observable<DishApi> {
     const myHeaders  = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.get<DishApi>(
-      this.dishesPath + '?pageIndex=' + pageIndex + '&sortedBy=' + sort + '&pageSize=' + pageSize + '&sortDir=' + order,
+      this.dishesPath + '?pageIndex=' + pageIndex + '&sortedBy=' + sort + '&pageSize=' + pageSize + '&sortDir=' + order + '&filter=' + filter,
       {headers: myHeaders});
   }
 
+  getFilteredMenuDishes(filtr: string): Observable<Dish[]> {
+    const myHeaders = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.http.get<Dish[]>(this.dishesPath + '/inmenu/' + filtr , {headers: myHeaders});
+  }
   getMenuDishes(): Observable<Dish[]> {
     const myHeaders = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.get<Dish[]>(this.dishesPath + '/inmenu', {headers: myHeaders});
   }
 
-  createDish(dish: Dish) {
+  createDish(dish: Dish): Observable<Object> {
     const myHeaders = new HttpHeaders().set('Content-Type', 'application/json');
-    this.http.post(this.dishesPath, JSON.stringify(dish), {headers: myHeaders}).subscribe();
+    return this.http.post(this.dishesPath, JSON.stringify(dish), {headers: myHeaders});
   }
 
-  deleteDishIngredient(dishId: number, ingId: number) {
+  deleteDishIngredient(dishId: number, ingId: number): Observable<Object> {
     const myHeaders  = new HttpHeaders().set('Content-Type', 'application/json');
-    this.http.delete(this.dishIngredientPath + '/' + String(dishId) + '/' + String(ingId), {headers: myHeaders}).subscribe();
+    return this.http.delete(this.dishIngredientPath + '/' + String(dishId) + '/' + String(ingId), {headers: myHeaders});
   }
 
-  createDishConsist(newCons: DishConsist) {
+  createDishConsist(newCons: DishConsist): Observable<Object> {
     const myHeaders = new HttpHeaders().set('Content-Type', 'application/json');
-    this.http.post(this.dishIngredientPath, JSON.stringify(newCons), {headers: myHeaders}).subscribe();
+    return this.http.post(this.dishIngredientPath, JSON.stringify(newCons), {headers: myHeaders});
   }
 
 }

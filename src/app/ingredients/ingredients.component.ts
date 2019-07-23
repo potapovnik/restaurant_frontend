@@ -71,30 +71,63 @@ export class IngredientsComponent implements AfterViewInit {
   }
 
   createIng() {
-    this.ingredientService.createIngredient(this.newIngredient);
+    this.ingredientService.createIngredient(this.newIngredient).pipe(
+      switchMap(() => {
+        return this.ingredientService
+          .getAllIngredients(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+      }),
+      map(data => {
+        this.resultsLength = data.totalCount;
+        return data.items;
+      }),
+      catchError(() => {
+        return observableOf([]);
+      })
+    ).subscribe((data: Ingredient[]) => {
+        this.ingredients = data;
+      }
+    );
   }
 
   createIngPart(ingId: number) {
     this.newIngredientPart.ingredientId = ingId;
     this.newIngredientPart.id = undefined;
-    this.ingredientService.createIngredientPart(this.newIngredientPart);
+    this.ingredientService.createIngredientPart(this.newIngredientPart).pipe(
+      switchMap(() => {
+        return this.ingredientService
+        .getAllIngredients(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+      }),
+      map(data => {
+        this.resultsLength = data.totalCount;
+        return data.items;
+      }),
+      catchError(() => {
+        return observableOf([]);
+      })
+    ).subscribe((data: Ingredient[]) => {
+      this.ingredients = data;
+    });
   }
 
   deleteIngredient(id: number) {
     let name: string;
+    let inArrayIndex: number;
     for (let i = 0; i < this.ingredients.length; i++) {
       if (this.ingredients[i].id === id) {
         name = this.ingredients[i].name;
+        inArrayIndex = id;
       }
     }
     if (confirm('Вы точно хотите удалить ингредиент ' + name + ' и все его партии?')) {
       this.ingredientService.deleteIngredient(id);
+      this.ingredients.splice(inArrayIndex, 1);
     }
   }
 
-  deleteIngPart(id: number) {
-    if (confirm('Вы точно хотите удалить партию с Id = ' + id + '?')) {
-      this.ingredientService.deleteIngredientPart(id);
+  deleteIngPart(ingr: Ingredient, part: IngredientPart) {
+    if (confirm('Вы точно хотите удалить партию с Id = ' + part.id + '?')) {
+      ingr.parts.splice(ingr.parts.indexOf(part), 1);
+      this.ingredientService.deleteIngredientPart(part.id);
     }
   }
 }

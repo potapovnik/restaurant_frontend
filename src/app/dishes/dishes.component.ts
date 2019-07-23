@@ -26,6 +26,7 @@ export class DishesComponent implements AfterViewInit {
   ingredients: Ingredient[];
   newDish: Dish = new Dish();
   editedDish: Dish = new Dish();
+  private filter = '';
 
   newConsist: DishConsist = new DishConsist();
   columnsToDisplay = ['id', 'name', 'type', 'cost', 'ismenu', 'consist'];
@@ -48,7 +49,7 @@ export class DishesComponent implements AfterViewInit {
       .pipe(
         startWith({}),
         switchMap(() => {
-          return this.dishesService.getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+          return this.dishesService.getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter);
         }),
         map(data => {
           this.resultsLength = data.totalCount;
@@ -69,6 +70,10 @@ export class DishesComponent implements AfterViewInit {
 
     // this.newDish.consist = [{ value: 3, ingredient: {id: 1, name: 'Картофель', measure: 'кг', parts: [] } } ];
   }
+  applyFilter() {
+   // this.filter
+    // this.dishesService.getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter).
+  }
 
   getAllIngredients() {
     this.ingredientService.getAllIngredients('id', '', 0, 1000).subscribe((data: IngredientApi) => this.ingredients = data.items);
@@ -79,22 +84,71 @@ export class DishesComponent implements AfterViewInit {
   }
 
   updateDish() {
-    this.dishesService.createDish(this.editedDish);
-  }
-  getAllDishes() {
-    // this.dishesService.getAllDishes().subscribe((data: Dish[]) => this.dishes = data);
+    this.dishesService.createDish(this.editedDish).pipe(
+      switchMap(() => {
+        return this.dishesService.getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter);
+      }),
+      map(data => {
+        this.resultsLength = data.totalCount;
+        return data.items;
+      }),
+      catchError(() => {
+        return observableOf([]);
+      })
+    ).subscribe((data: Dish[]) => {
+      this.dishes = data;
+    });
   }
   createDish() {
-    this.dishesService.createDish(this.newDish);
+    this.dishesService.createDish(this.newDish).pipe(
+      switchMap(() => {
+        return this.dishesService.getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter);
+      }),
+      map(data => {
+        this.resultsLength = data.totalCount;
+        return data.items;
+      }),
+      catchError(() => {
+        return observableOf([]);
+      })
+    ).subscribe((data: Dish[]) => {
+        this.dishes = data;
+    });
   }
 
 
   deleteConsist(dishId: number, ingId: number) {
-    this.dishesService.deleteDishIngredient(dishId, ingId);
+    this.dishesService.deleteDishIngredient(dishId, ingId).pipe(
+      switchMap(() => {
+        return this.dishesService.getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter);
+      }),
+      map(data => {
+        this.resultsLength = data.totalCount;
+        return data.items;
+      }),
+      catchError(() => {
+        return observableOf([]);
+      })
+    ).subscribe((data: Dish[]) => {
+      this.dishes = data;
+    });
   }
 
   createDishConsist(newCon: DishConsist, dishId: number) {
     newCon.id.dishId = dishId;
-    this.dishesService.createDishConsist(newCon);
+    this.dishesService.createDishConsist(newCon).pipe(
+      switchMap(() => {
+        return this.dishesService.getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter);
+      }),
+      map(data => {
+        this.resultsLength = data.totalCount;
+        return data.items;
+      }),
+      catchError(() => {
+        return observableOf([]);
+      })
+    ).subscribe((data: Dish[]) => {
+        this.dishes = data;
+    });
   }
 }

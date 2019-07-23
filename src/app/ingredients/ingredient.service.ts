@@ -24,11 +24,11 @@ export class IngredientService {
       this.ingredientsPath + '?pageIndex=' + pageIndex + '&sortedBy=' + sort + '&pageSize=' + pageSize + '&sortDir=' + order,
       {headers: this.myHeaders});
   }
-  createIngredient(ing: Ingredient) {
-    this.http.post(this.ingredientsPath, JSON.stringify(ing), {headers: this.myHeaders}).subscribe();
+  createIngredient(ing: Ingredient): Observable<Object> {
+    return this.http.post(this.ingredientsPath, JSON.stringify(ing), {headers: this.myHeaders});
   }
-  createIngredientPart(ingPart: IngredientPart) {
-    this.http.post(this.ingredientPartsPath, JSON.stringify(ingPart), {headers: this.myHeaders}).subscribe();
+  createIngredientPart(ingPart: IngredientPart): Observable<Object> {
+    return this.http.post(this.ingredientPartsPath, JSON.stringify(ingPart), {headers: this.myHeaders}) ;
   }
   deleteIngredient(ingId: number) {
     this.http.delete(this.ingredientsPath + '/' + String(ingId), {headers: this.myHeaders}).subscribe();
