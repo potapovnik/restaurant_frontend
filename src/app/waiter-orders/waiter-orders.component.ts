@@ -2,14 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import {UsersService} from '../users/users.service';
 import {Users} from '../users/users';
 import {OrdersService} from '../utils/orders.service';
-import {WaiterService} from './waiter.service';
 import {Dish} from '../dishes/Dish';
 import {DishService} from '../dishes/dish.service';
 import {OrderDish} from '../utils/order.dish';
 import {Orders} from '../utils/orders';
-import {CookOrders} from '../cook-orders/cook.orders';
-import {WaiterOrders} from './waiter.orders';
 import {DishView} from '../utils/dishView';
+import {HistoryService} from '../utils/history.service';
+import {History} from '../utils/History';
 
 @Component({
   selector: 'app-waiter-orders',
@@ -27,9 +26,10 @@ export class WaiterOrdersComponent implements OnInit {
   choosedCook: Users;
   orderDishList: OrderDish[];
   createdOrder: Orders;
+  newHistory: History;
 
-  constructor(private userService: UsersService, private orderService: OrdersService, private  waiterSerivce: WaiterService
-    , private dishService: DishService) {
+  constructor(private userService: UsersService, private orderService: OrdersService
+    , private dishService: DishService, private historyService: HistoryService) {
 
   }
 
@@ -37,8 +37,6 @@ export class WaiterOrdersComponent implements OnInit {
     this.userService.getAllCook().subscribe(resp => this.cookList = resp);
     this.dishService.getAllDishes().subscribe(resp => this.dishList = resp);
     this.newOrder = new Orders();
-    this.newOrder.cookOrders = new CookOrders();
-    this.newOrder.waiterOrders = new WaiterOrders();
     this.selectedDish = new Dish();
     this.choosedCook = new Users();
     this.orderDishList = [];
@@ -67,17 +65,19 @@ export class WaiterOrdersComponent implements OnInit {
 
   chooseCook(cook: Users) {
     this.choosedCook = cook;
-    this.newOrder.cookOrders.cook = cook.id;
+
   }
 
   getAllMyOrders(id: number) {
-    this.waiterSerivce.allOrdersOfWaiter(id).subscribe(resp => this.myOrders = resp);
+    this.orderService.getAllById(id).subscribe(resp => this.myOrders = resp);
   }
 
   createOrder() {
-    this.newOrder.waiterOrders.isTake = true;
-    this.newOrder.waiterOrders.timeOfTake = new Date();
-    this.newOrder.waiterOrders.waiter = 4;
     this.orderService.createOrder(this.newOrder).subscribe(resp => this.createdOrder = resp);
+    this.newHistory = new History();
+    this.newHistory.order_id = this.createdOrder.id;
+    this.newHistory.status_id = 1;
+    this.newHistory.user_id = 1; // Изменить на текующий!
+    this.historyService.nextStatus(this.newHistory).subscribe();
   }
 }

@@ -21,6 +21,7 @@ import { DishesComponent } from './dishes/dishes.component';
 import { WaiterOrdersComponent } from './waiter-orders/waiter-orders.component';
 import { CookOrdersComponent } from './cook-orders/cook-orders.component';
 import { UtilsComponent } from './utils/utils.component';
+import { AllOrdersComponent } from './all-orders/all-orders.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { UtilsComponent } from './utils/utils.component';
     WaiterOrdersComponent,
     CookOrdersComponent,
     UtilsComponent,
+    AllOrdersComponent,
   ],
   imports: [
     BrowserModule,

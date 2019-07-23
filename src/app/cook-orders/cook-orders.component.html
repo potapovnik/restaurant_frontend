@@ -2,8 +2,8 @@
   <div class="containerMyOrders">
     <mat-action-list class="listOfMyOrders" *ngFor="let myOrder of listOfMyOrders">
       <div mat-list-item>
-        <div>
-          {{myOrder.id}} {{myOrder.comments}}
+        <div class="headerOfItems">
+          Номер заказа: {{myOrder.id}} комментарий: {{myOrder.comments}}
         </div>
         <button mat-button (click)="isTake(myOrder)">
           Принять заказ

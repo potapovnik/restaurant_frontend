@@ -1,6 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {CookService} from './cook.service';
-import {CookOrders} from './cook.orders';
+import {UsersService} from '../users/users.service';
+import {Orders} from '../utils/orders';
+import {OrdersService} from '../utils/orders.service';
+import {HistoryService} from '../utils/history.service';
+import {History} from '../utils/History';
 
 @Component({
   selector: 'app-cook-orders',
@@ -8,34 +11,36 @@ import {CookOrders} from './cook.orders';
   styleUrls: ['./cook-orders.component.scss']
 })
 export class CookOrdersComponent implements OnInit {
-  listOfMyOrders: CookOrders[];
-  newCookOrders: CookOrders;
+  listOfMyOrders: Orders[];
+  newHistory: History;
 
-  constructor(private cookService: CookService) {
+  constructor(private userService: UsersService, private orderService: OrdersService, private  historyService: HistoryService) {
   }
 
   ngOnInit() {
     this.getAllOrderOfCook();
+
   }
 
   getAllOrderOfCook() {
-    this.cookService.allOrdersOfCook(3).subscribe(resp => this.listOfMyOrders = resp);
+    this.orderService.getAllById(3).subscribe(resp => this.listOfMyOrders = resp);
   }
 
-  updateOrder(cookOrder: CookOrders) {
-    this.cookService.updateOrder(cookOrder).subscribe();
+  updateOrder(order: Orders, status: number) {
+    this.newHistory  = new History();
+    this.newHistory.user_id = 2; // Изменить на текущий!
+    this.newHistory.order_id = order.id;
+    this.newHistory.status_id = status;
+    this.historyService.nextStatus(this.newHistory).subscribe();
   }
 
-  isTake(cookOrder: CookOrders) {
-    cookOrder.isTake = true;
-    this.newCookOrders = new CookOrders();
-    this.newCookOrders.id = cookOrder.id;
-    this.newCookOrders.cook = cookOrder.cook;
-    this.newCookOrders.isTake = true;
-    this.updateOrder(this.newCookOrders);
+
+  isTake(order: Orders) {
+    this.updateOrder(order, 3);
   }
-  isReady(cookOrder: CookOrders) {
-    cookOrder.isReady = true;
-    this.updateOrder(cookOrder);
+
+  isReady(order: Orders) {
+    this.updateOrder(order, 4);
   }
+
 }

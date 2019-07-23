@@ -18,19 +18,19 @@ export class UsersService {
   getUsersById(id: number): Observable<Users> {
     const url = this.users + '/' + id;
     console.log(url + '- get by id:' + id);
-    return this.http.get<Users>(url);
+    return this.http.get<Users>(url, {headers: this.head});
   }
 
   getAllUsers(): Observable<Users[]> {
     const url = this.users + '/getAll';
     console.log(url + '- get all');
-    return this.http.get<Users[]>(url);
+    return this.http.get<Users[]>(url, {headers: this.head});
   }
 
   deleteUserById(id: number): Observable<Boolean> {
     const url = this.users + '/' + id;
     console.log(url + '- delete');
-    return this.http.delete<Boolean>(url);
+    return this.http.delete<Boolean>(url, {headers: this.head});
   }
 
   update(user: Users): Observable<Users> {
@@ -46,12 +46,12 @@ export class UsersService {
   getAllRole(): Observable<Role[]> {
     const url = this.roles + '/allUsers';
     console.log(url + '- get all');
-    return this.http.get<Role[]>(url);
+    return this.http.get<Role[]>(url, {headers: this.head});
   }
 
   getAllCook(): Observable<Users[]> {
     const url = this.users + '/getAllCook';
     console.log(url + '- getAllCook');
-    return this.http.get<Users[]>(url);
+    return this.http.get<Users[]>(url, {headers: this.head});
   }
 }
