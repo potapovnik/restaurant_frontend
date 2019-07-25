@@ -25,6 +25,7 @@ import { CookOrdersComponent } from './cook-orders/cook-orders.component';
 import { UtilsComponent } from './utils/utils.component';
 import {IngredientsReadOnlyComponent} from './ingredients-read-only/ingredients-read.component';
 import {MissingIngredientsComponent} from './missing-ingredients/missing-ingredients.component';
+import {AllOrdersComponent} from './all-orders/all-orders.component';
 
 
 @NgModule({
@@ -38,6 +39,7 @@ import {MissingIngredientsComponent} from './missing-ingredients/missing-ingredi
     UtilsComponent,
     IngredientsReadOnlyComponent,
     MissingIngredientsComponent,
+    AllOrdersComponent,
 
   ],
   imports: [

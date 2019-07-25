@@ -19,6 +19,14 @@
   margin-left: 15px;
   background-color: rgb(245,245,245);
 }
+.containerOfStatus {
+  display: flex;
+  flex-direction: column;
+}
+.givenOrder {
+  background-color: rgb(245,245,245);
+  margin-top: 10px;
+}
 .contentListOfCook {
   display: flex;
   flex-direction: column;
@@ -31,4 +39,7 @@
   border-top: 0px;
   display: flex;
   align-items: flex-start;
+}
+.headerOfItems {
+  text-align: center;
 }

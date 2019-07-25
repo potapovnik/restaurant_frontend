@@ -46,14 +46,29 @@
       </button>
     </mat-action-list>
   </div>
-    <div class="informationOrder">
-        panel with information
+  <div class="informationOrder">
+    <div #current *ngIf="isChosed === false; else info">
+      panel with information
     </div>
-    <div class="containerOrderList">
-      <mat-list class="listOfUsers" *ngFor="let order of myOrders">
-        <button mat-list-item>
-          {{order.id}}} {{order.comment}}
-        </button>
-      </mat-list>
-    </div>
+
+    <ng-template #info>
+      <div class="containerOfStatus">
+        <div>Официант принял: {{isTakeWaiter}}</div>
+          <div>Повар принял: {{isTakeCook}}</div>
+          <div>Повар отдал: {{isGivenCook}}</div>
+          <div>Официант отдал: {{isGivenWaiter}}</div>
+        <button mat-button class="givenOrder" (click)="givenOrder(selectedOrder)">Отдать заказ</button>
+      </div>
+    </ng-template>
+
   </div>
+  <div class="containerOrderList">
+    <mat-list class="listOfUsers" *ngFor="let myOrder of myOrders">
+      <button mat-list-item (click)="selectMyOrder(myOrder)">
+        <div class="headerOfItems">
+          Номер заказа: {{myOrder.id}} комментарий: {{myOrder.comments}}
+        </div>
+      </button>
+    </mat-list>
+  </div>
+</div>

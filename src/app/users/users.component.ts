@@ -13,12 +13,14 @@ export class UsersComponent implements OnInit {
   createdUser: Users;
   allUsers: Users[];
   allRoles: Role[];
+  isChosed: Boolean;
 
   constructor(private userService: UsersService) {
   }
 
 
   ngOnInit() {
+    this.isChosed = false;
     this.chosedUser = new Users();
     this.createdUser = new Users();
     this.getAllUsers();
@@ -34,6 +36,7 @@ export class UsersComponent implements OnInit {
   }
 
   chooseUser(user: Users) {
+    this.isChosed = true;
     this.chosedUser = user;
   }
 

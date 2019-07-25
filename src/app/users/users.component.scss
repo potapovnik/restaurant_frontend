@@ -6,9 +6,11 @@
   flex-wrap: nowrap;
   justify-content: space-between;
 }
-.containerOfListUsers{
+
+.containerOfListUsers {
   flex-grow: 1;
 }
+
 .listOfUsers {
   border: 1px lightgrey double;
   border-right: 0px;
@@ -17,7 +19,19 @@
   align-items: flex-start;
 }
 
+.changeWindow {
+  width: 300px;
+  height: 300px;
+}
 
+.test {
+  width: 300px;
+  height: 300px;
+
+}
+.textChangeContainer {
+  text-align: center;
+}
 .containerForCreateUsers {
   padding-top: 3%;
   padding-left: 1%;
@@ -26,6 +40,7 @@
   display: flex;
   flex-direction: column;
 }
+
 .windowOfUser {
   padding-right: 20%;
   padding-top: 3%;
@@ -35,20 +50,25 @@
   display: flex;
   flex-direction: column;
 }
+
 .save {
   width: 35%;
 }
+
 .delete {
   margin-left: 5%;
   width: 30%;
 }
-.create{
+
+.create {
   width: 35%;
 }
+
 .cancel {
   margin-left: 5%;
   width: 35%;
 }
+
 .containerButtons {
   margin-top: 8%;
 }
