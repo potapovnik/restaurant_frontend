@@ -1,5 +1,5 @@
 import {DishConsist} from './DishConsist';
-import {Ingredient} from '../ingredients/Ingredient';
+import {Ingredient} from './Ingredient';
 
 export class Dish {
   id: number;

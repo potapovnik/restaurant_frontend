@@ -1,13 +1,16 @@
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
-import {Ingredient} from './Ingredient';
+import {Ingredient} from '../utils/Ingredient';
 import {IngredientService} from './ingredient.service';
-import {IngredientPart} from './IngredientPart';
+import {IngredientPart} from '../utils/IngredientPart';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {merge, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {MissingIngredient} from './MissingIngredient';
+import {StorageService} from '../storage/storage.service';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {validatorIngredientUniqueName} from './validatorIngredientUniqueName';
+import {validatorIngredientPartValueLessStorage} from './validatorIngredientPartValueLessStorage';
 
 
 @Component({
@@ -24,24 +27,53 @@ import {MissingIngredient} from './MissingIngredient';
 })
 export class IngredientsComponent implements AfterViewInit {
   ingredients: Ingredient[];
-  columnsToDisplay = ['id', 'name', 'measure', 'delete'];
-  columnsToDisplayMissing = ['id', 'name', 'measure', 'amount', 'needAmount'];
-  isMissing: boolean[] = [];
-  missingIngredients: MissingIngredient[];
+  columnsToDisplay = ['id', 'name', 'measure', 'summaryAmount', 'volumePerUnit', 'summaryVolume', 'delete'];
   newIngredient: Ingredient = new Ingredient();
-  newIngredientPart: IngredientPart = new IngredientPart();
+  // newIngredientPart: IngredientPart = new IngredientPart();
   resultsLength = 0;
   expandedElement: Ingredient | null;
-
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: false}) sort: MatSort;
+  _newIngredientForm: FormGroup;
+  _newIngredientPartForm: FormGroup;
+  freeStorageVolume: number;
+  maxStorageVolume: number;
 
-  constructor(private ingredientService: IngredientService) {
+  // curIngredietnVolmePerUnit: number;
+
+  constructor(private ingredientService: IngredientService, private storageService: StorageService, private fb: FormBuilder) {
+    this._newIngredientForm = fb.group({
+      name: fb.control(undefined, [Validators.required], [validatorIngredientUniqueName(this.ingredientService)]),
+      measure: fb.control(undefined, [Validators.required]),
+      volumePerUnit: fb.control(undefined, [Validators.required, Validators.min(0.0000000001)])
+    });
+    this._newIngredientPartForm = fb.group({
+      value: fb.control(undefined, [Validators.required, Validators.min(0.0000000001)]),
+      expirationDate: fb.control(undefined, [Validators.required]),
+      ingredientId: fb.control(undefined, [Validators.required])
+    });
+  }
+
+  changeFormValidator(id: number, ingrVolumePerUnit: number) {
+    this._newIngredientPartForm.reset();
+    this._newIngredientPartForm.patchValue({ingredientId: id});
+    this._newIngredientPartForm.controls['value'].clearValidators();
+    this._newIngredientPartForm.controls['value'].setValidators(
+      [Validators.required, Validators.min(0.0000000001), Validators.max(this.freeStorageVolume / ingrVolumePerUnit)]);
   }
 
   ngAfterViewInit() {
-    // this.getAllIngredients();
-    this.getMissingIngredients();
+    this.storageService.getMaxStorageVolume().pipe(map(data => this.maxStorageVolume = data.maxStorageVolume),
+      switchMap(() => {
+        return this.ingredientService.getUsedStorage();
+      })).subscribe((data: number) => this.freeStorageVolume = this.maxStorageVolume - data);
+    this.storageService.refreshUsedStorage$.pipe(
+      switchMap(() => {
+        return this.ingredientService.getUsedStorage();
+      }))
+      .subscribe((data: number) => this.freeStorageVolume = this.maxStorageVolume - data);
+
+
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
@@ -58,20 +90,22 @@ export class IngredientsComponent implements AfterViewInit {
           return observableOf([]);
         })
       ).subscribe((data: Ingredient[]) => {
+      data.forEach(function (a: Ingredient) {
+        let sum = 0;
+        for (let i = 0; i < a.parts.length; i++) {
+          sum += a.parts[i].value;
+
+        }
+        a.summaryAmount = sum;
+        a.summaryVolume = sum * a.volumePerUnit;
+      });
       this.ingredients = data;
     });
   }
 
-  getAllIngredients() {
-    // this.ingredientService.getAllIngredients('sort', 'direction', 0).subscribe((data: Ingredient[]) => this.ingredients = data);
-  }
-
-  getMissingIngredients() {
-    this.ingredientService.getMissingIngredients().subscribe((data: MissingIngredient[]) => this.missingIngredients = data);
-  }
 
   createIng() {
-    this.ingredientService.createIngredient(this.newIngredient).pipe(
+    this.ingredientService.createIngredient(this._newIngredientForm.value).pipe(
       switchMap(() => {
         return this.ingredientService
           .getAllIngredients(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
@@ -84,29 +118,55 @@ export class IngredientsComponent implements AfterViewInit {
         return observableOf([]);
       })
     ).subscribe((data: Ingredient[]) => {
-        this.ingredients = data;
-      }
-    );
-  }
-
-  createIngPart(ingId: number) {
-    this.newIngredientPart.ingredientId = ingId;
-    this.newIngredientPart.id = undefined;
-    this.ingredientService.createIngredientPart(this.newIngredientPart).pipe(
-      switchMap(() => {
-        return this.ingredientService
-        .getAllIngredients(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
-      }),
-      map(data => {
-        this.resultsLength = data.totalCount;
-        return data.items;
-      }),
-      catchError(() => {
-        return observableOf([]);
-      })
-    ).subscribe((data: Ingredient[]) => {
+      data.forEach(function (a: Ingredient) {
+        let sum = 0;
+        for (let i = 0; i < a.parts.length; i++) {
+          sum += a.parts[i].value;
+        }
+        a.summaryAmount = sum;
+        a.summaryVolume = sum * a.volumePerUnit;
+      });
       this.ingredients = data;
     });
+    this.newIngredient.name = '';
+    this.newIngredient.measure = '';
+    this.newIngredient.volumePerUnit = 0;
+    this._newIngredientForm.reset();
+  }
+
+  createIngPart() {
+
+    // this.newIngredientPart.ingredientId = ingId;
+    // this.newIngredientPart.id = undefined;
+    this.ingredientService.createIngredientPart(this._newIngredientPartForm.value)
+      .pipe(
+        switchMap(() => {
+          return this.ingredientService
+            .getAllIngredients(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+        }),
+        map(data => {
+          this.resultsLength = data.totalCount;
+          return data.items;
+        }),
+        catchError(() => {
+          return observableOf([]);
+        })
+      ).subscribe((data: Ingredient[]) => {
+      data.forEach(function (a: Ingredient) {
+        let sum = 0;
+        for (let i = 0; i < a.parts.length; i++) {
+          sum += a.parts[i].value;
+
+        }
+        a.summaryAmount = sum;
+        a.summaryVolume = sum * a.volumePerUnit;
+      });
+      this.ingredients = data;
+      this.ingredientService.refreshMissingIngredients$.next(true);
+      this.storageService.refreshUsedStorage$.next(true);
+      // this._newIngredientPartForm.reset();
+    });
+
   }
 
   deleteIngredient(id: number) {
@@ -119,15 +179,50 @@ export class IngredientsComponent implements AfterViewInit {
       }
     }
     if (confirm('Вы точно хотите удалить ингредиент ' + name + ' и все его партии?')) {
-      this.ingredientService.deleteIngredient(id);
-      this.ingredients.splice(inArrayIndex, 1);
+      this.ingredientService.deleteIngredient(id).pipe(catchError(() => {
+        return observableOf([]);
+      })).pipe(
+        switchMap(() => {
+          return this.ingredientService
+            .getAllIngredients(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+        }),
+        map(data => {
+          this.resultsLength = data.totalCount;
+          return data.items;
+        }),
+        catchError(() => {
+          return observableOf([]);
+        })
+      ).subscribe((data: Ingredient[]) => {
+        data.forEach(function (a: Ingredient) {
+          let sum = 0;
+          for (let i = 0; i < a.parts.length; i++) {
+            sum += a.parts[i].value;
+          }
+          a.summaryAmount = sum;
+          a.summaryVolume = sum * a.volumePerUnit;
+        });
+        this.ingredients = data;
+        this.storageService.refreshUsedStorage$.next(true);
+        this.ingredientService.refreshMissingIngredients$.next(true);
+      });
     }
   }
 
   deleteIngPart(ingr: Ingredient, part: IngredientPart) {
     if (confirm('Вы точно хотите удалить партию с Id = ' + part.id + '?')) {
       ingr.parts.splice(ingr.parts.indexOf(part), 1);
-      this.ingredientService.deleteIngredientPart(part.id);
+      this.ingredientService.deleteIngredientPart(part.id).subscribe(() => {
+        this.ingredientService.refreshMissingIngredients$.next(true);
+        this.storageService.refreshUsedStorage$.next(true);
+      });
+      let sum = 0;
+      for (let i = 0; i < this.ingredients[this.ingredients.indexOf(ingr)].parts.length; i++) {
+        sum += this.ingredients[this.ingredients.indexOf(ingr)].parts[i].value;
+      }
+      this.ingredients[this.ingredients.indexOf(ingr)].summaryAmount = sum;
+      this.ingredients[this.ingredients.indexOf(ingr)].summaryVolume = sum * this.ingredients[this.ingredients.indexOf(ingr)].volumePerUnit;
     }
   }
+
 }

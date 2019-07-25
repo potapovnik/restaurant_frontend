@@ -2,7 +2,7 @@
 
 <div class="all-ingredients-table-container">
   <mat-form-field>
-    <input matInput (keyup)="applyFilter()" placeholder="Фильтр" name="filter">
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Фильтр" name="filter">
   </mat-form-field>
   <table mat-table [dataSource]="dishes" multiTemplateDataRows matSort matSortActive="id" matSortDisableClear
          matSortDirection="asc">
@@ -72,19 +72,20 @@
           <table>
             <tr>
               <td colspan="3">
-                <form name="addIngredientPart">
+                <ng-container [formGroup]="_editDishForm">
                   <mat-form-field>
-                    <input matInput required type="text" placeholder="Название" [(ngModel)]="editedDish.name"
-                           name="value">
+                    <mat-label>Название блюда</mat-label>
+                    <input matInput formControlName="name">
+                    <!--    <mat-error *appControlErrors="let error of 'name'">{{error}}</mat-error>-->
                   </mat-form-field>
                   <mat-form-field>
-                    <input matInput type="text" placeholder="Тип" required
-                           [(ngModel)]="editedDish.type" name="date">
-
+                    <mat-label>Тип блюда</mat-label>
+                    <input matInput formControlName="type">
+                    <!--    <mat-error *appControlErrors="let error of 'name'">{{error}}</mat-error>-->
                   </mat-form-field>
-                  <mat-checkbox [(ngModel)]="editedDish.ismenu" name="ismenu">В меню</mat-checkbox>
-                  <button mat-stroked-button (click)="updateDish()"> Изменить</button>
-                </form>
+                  <mat-checkbox formControlName="ismenu"> В меню</mat-checkbox>
+                </ng-container>
+                <button mat-stroked-button [disabled]="_editDishForm.invalid" (click)="updateDish()">Изменить</button>
               </td>
             </tr>
           </table>
@@ -95,7 +96,7 @@
     <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
     <tr mat-row *matRowDef="let element; columns: columnsToDisplay" class="example-element-row"
         [class.example-expanded-row]="expandedElement === element"
-        (click)="expandedElement = expandedElement === element ? null : element; expandedElement === null ? null : chooseDish(expandedElement);"></tr>
+        (click)="expandedElement = expandedElement === element ? null : element; setEditDishForm( element.id, element.name, element.type, element.cost, element.ismenu)"></tr>
     <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
     <!--    <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>-->
   </table>
@@ -103,26 +104,23 @@
                  [pageSizeOptions]="[2, 5, 10, 25, 100]"></mat-paginator>
 </div>
 
-
-<form name="addDish">
+<ng-container [formGroup]="_newDishForm">
   <mat-form-field>
-    <input matInput required type="text" placeholder="Название" [(ngModel)]="newDish.name" name="name">
+    <mat-label>Название блюда</mat-label>
+    <input matInput formControlName="name">
+    <!--    <mat-error *appControlErrors="let error of 'name'">{{error}}</mat-error>-->
   </mat-form-field>
   <mat-form-field>
-    <input matInput required type="text" placeholder="Тип" [(ngModel)]="newDish.type" name="type">
+    <mat-label>Тип блюда</mat-label>
+    <input matInput formControlName="type">
+    <!--    <mat-error *appControlErrors="let error of 'name'">{{error}}</mat-error>-->
   </mat-form-field>
   <mat-form-field>
-    <input matInput required type="number" placeholder="Цена" [(ngModel)]="newDish.cost" name="cost">
+    <mat-label>Цена</mat-label>
+    <input matInput formControlName="cost" type="number">
+    <!--    <mat-error *appControlErrors="let error of 'name'">{{error}}</mat-error>-->
   </mat-form-field>
+  <mat-checkbox formControlName="ismenu"> В меню</mat-checkbox>
+</ng-container>
+<button mat-stroked-button [disabled]="_newDishForm.invalid" (click)="createDish()">Добавить блюдо</button>
 
-  <mat-checkbox [(ngModel)]="newDish.ismenu" name="ismenu">В меню</mat-checkbox>
-
-
-  <!--    <mat-select placeholder="Роль: " [(ngModel)]="newDish.ingredients[0]">-->
-  <!--      <mat-option *ngFor="let el of ingredients" [value]="el">-->
-  <!--        {{el.name}}-->
-  <!--      </mat-option>-->
-  <!--    </mat-select>-->
-
-  <button mat-stroked-button (click)="createDish()">Добавить блюдо</button>
-</form>

@@ -18,14 +18,16 @@ import {
 } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { IngredientsComponent } from './ingredients/ingredients.component';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { DishesComponent } from './dishes/dishes.component';
 import { WaiterOrdersComponent } from './waiter-orders/waiter-orders.component';
 import { CookOrdersComponent } from './cook-orders/cook-orders.component';
 import { UtilsComponent } from './utils/utils.component';
+import { AllOrdersComponent } from './all-orders/all-orders.component';
 import {IngredientsReadOnlyComponent} from './ingredients-read-only/ingredients-read.component';
 import {MissingIngredientsComponent} from './missing-ingredients/missing-ingredients.component';
-import {AllOrdersComponent} from './all-orders/all-orders.component';
+import {StorageComponent} from './storage/storage.component';
+import {CommonModule} from '@angular/common';
 
 
 @NgModule({
@@ -37,9 +39,10 @@ import {AllOrdersComponent} from './all-orders/all-orders.component';
     WaiterOrdersComponent,
     CookOrdersComponent,
     UtilsComponent,
+    AllOrdersComponent,
     IngredientsReadOnlyComponent,
     MissingIngredientsComponent,
-    AllOrdersComponent,
+    StorageComponent,
 
   ],
   imports: [
@@ -64,6 +67,8 @@ import {AllOrdersComponent} from './all-orders/all-orders.component';
     MatDatepickerModule,
     MatNativeDateModule,
     MatCheckboxModule,
+    CommonModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

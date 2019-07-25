@@ -2,13 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import {UsersService} from '../users/users.service';
 import {Users} from '../users/users';
 import {OrdersService} from '../utils/orders.service';
-import {Dish} from '../dishes/Dish';
 import {DishService} from '../dishes/dish.service';
 import {OrderDish} from '../utils/order.dish';
 import {Orders} from '../utils/orders';
 import {DishView} from '../utils/dishView';
 import {HistoryService} from '../utils/history.service';
 import {History} from '../utils/History';
+import {Dish} from '../utils/Dish';
 
 @Component({
   selector: 'app-waiter-orders',

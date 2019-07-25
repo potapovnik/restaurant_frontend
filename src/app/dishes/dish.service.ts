@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Dish, DishApi} from './Dish';
-import {DishConsist} from './DishConsist';
+import {Dish, DishApi} from '../utils/Dish';
+import {DishConsist} from '../utils/DishConsist';
 
 
 @Injectable({

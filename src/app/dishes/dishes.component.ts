@@ -1,13 +1,15 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {Dish} from './Dish';
+import {Dish} from '../utils/Dish';
 import {DishService} from './dish.service';
-import {Ingredient, IngredientApi} from '../ingredients/Ingredient';
+import {Ingredient, IngredientApi} from '../utils/Ingredient';
 import {IngredientService} from '../ingredients/ingredient.service';
-import {DishConsist, EmbeddedId} from './DishConsist';
+import {DishConsist, EmbeddedId} from '../utils/DishConsist';
 import {MatPaginator, MatSort} from '@angular/material';
-import {merge, of as observableOf} from 'rxjs';
-import {catchError, map, startWith, switchMap} from 'rxjs/operators';
+import {BehaviorSubject, merge, Observable, of as observableOf} from 'rxjs';
+import {catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap} from 'rxjs/operators';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import {StorageService} from '../storage/storage.service';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-dishes',
@@ -24,24 +26,58 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 export class DishesComponent implements AfterViewInit {
   dishes: Dish[];
   ingredients: Ingredient[];
-  newDish: Dish = new Dish();
-  editedDish: Dish = new Dish();
-  private filter = '';
-
+  // newDish: Dish = new Dish();
+  // editedDish: Dish = new Dish();
+  filter$: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  filter = '';
   newConsist: DishConsist = new DishConsist();
   columnsToDisplay = ['id', 'name', 'type', 'cost', 'ismenu', 'consist'];
   resultsLength = 0;
   expandedElement: Dish | null;
+  _newDishForm: FormGroup;
+  _editDishForm: FormGroup;
 
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: false}) sort: MatSort;
 
-  constructor(private dishesService: DishService, private ingredientService: IngredientService) {
-    this.newDish.ismenu = false;
+  constructor(private dishesService: DishService, private ingredientService: IngredientService, private fb: FormBuilder) {
+    this._newDishForm = fb.group({
+      name: fb.control(undefined, [Validators.required]),
+      type: fb.control(undefined, [Validators.required]),
+      cost: fb.control(undefined, [Validators.min(0.01), Validators.required]),
+      ismenu: fb.control(false, [Validators.required])
+    });
+    this._editDishForm = fb.group({
+      id: fb.control(undefined, [Validators.required]),
+      name: fb.control(undefined, [Validators.required]),
+      type: fb.control(undefined, [Validators.required]),
+      cost: fb.control(undefined, [Validators.min(0.01), Validators.required]),
+      ismenu: fb.control(undefined, [Validators.required])
+    });
   }
 
+  setEditDishForm(id: number, name: string, type: string, cost: number, ismenu: boolean) {
+    this._editDishForm.controls['id'].setValue(id);
+    this._editDishForm.controls['name'].setValue(name);
+    this._editDishForm.controls['type'].setValue(type);
+    this._editDishForm.controls['cost'].setValue(cost);
+    this._editDishForm.controls['ismenu'].setValue(ismenu);
+  }
   ngAfterViewInit() {
-    // this.getAllDishes();
+    this.filter$.pipe(
+      distinctUntilChanged(), debounceTime(300), map(data => {
+        this.filter = data;
+      }),
+      switchMap(() => {
+        return this.dishesService
+          .getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter);
+      }),
+      map(data => {
+        this.resultsLength = data.totalCount;
+        return data.items;
+      })).subscribe((data: Dish[]) => {
+      this.dishes = data;
+    });
 
     this.getAllIngredients();
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
@@ -49,7 +85,8 @@ export class DishesComponent implements AfterViewInit {
       .pipe(
         startWith({}),
         switchMap(() => {
-          return this.dishesService.getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter);
+          return this.dishesService
+            .getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter);
         }),
         map(data => {
           this.resultsLength = data.totalCount;
@@ -62,31 +99,27 @@ export class DishesComponent implements AfterViewInit {
       this.dishes = data;
     });
     this.newConsist.id = new EmbeddedId();
-    // this.newDish.name = 'Новое тестовое блюдо';
-    // this.newDish.type = 'второе';
-    // this.newDish.cost = 11.2;
-    // this.newDish.ismenu = true;
-    // this.newDish.consist = [];
 
-    // this.newDish.consist = [{ value: 3, ingredient: {id: 1, name: 'Картофель', measure: 'кг', parts: [] } } ];
   }
-  applyFilter() {
-   // this.filter
-    // this.dishesService.getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter).
+
+  applyFilter(value: string) {
+    this.filter$.next(value);
+    // this.dishesService.getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.fil
   }
 
   getAllIngredients() {
     this.ingredientService.getAllIngredients('id', '', 0, 1000).subscribe((data: IngredientApi) => this.ingredients = data.items);
   }
 
-  chooseDish(choosed: Dish) {
-    this.editedDish = choosed;
-  }
+  // chooseDish(choosed: Dish) {
+  //   this.editedDish = choosed;
+  // }
 
   updateDish() {
-    this.dishesService.createDish(this.editedDish).pipe(
+    this.dishesService.createDish(this._editDishForm.value).pipe(
       switchMap(() => {
-        return this.dishesService.getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter);
+        return this.dishesService
+          .getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter);
       }),
       map(data => {
         this.resultsLength = data.totalCount;
@@ -99,10 +132,12 @@ export class DishesComponent implements AfterViewInit {
       this.dishes = data;
     });
   }
+
   createDish() {
-    this.dishesService.createDish(this.newDish).pipe(
+    this.dishesService.createDish(this._newDishForm.value).pipe(
       switchMap(() => {
-        return this.dishesService.getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter);
+        return this.dishesService
+          .getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter);
       }),
       map(data => {
         this.resultsLength = data.totalCount;
@@ -112,7 +147,7 @@ export class DishesComponent implements AfterViewInit {
         return observableOf([]);
       })
     ).subscribe((data: Dish[]) => {
-        this.dishes = data;
+      this.dishes = data;
     });
   }
 
@@ -120,7 +155,8 @@ export class DishesComponent implements AfterViewInit {
   deleteConsist(dishId: number, ingId: number) {
     this.dishesService.deleteDishIngredient(dishId, ingId).pipe(
       switchMap(() => {
-        return this.dishesService.getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter);
+        return this.dishesService
+          .getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter);
       }),
       map(data => {
         this.resultsLength = data.totalCount;
@@ -136,9 +172,11 @@ export class DishesComponent implements AfterViewInit {
 
   createDishConsist(newCon: DishConsist, dishId: number) {
     newCon.id.dishId = dishId;
+    newCon.value = newCon.value > 0 ? newCon.value : 0;
     this.dishesService.createDishConsist(newCon).pipe(
       switchMap(() => {
-        return this.dishesService.getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter);
+        return this.dishesService
+          .getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter);
       }),
       map(data => {
         this.resultsLength = data.totalCount;
@@ -148,7 +186,7 @@ export class DishesComponent implements AfterViewInit {
         return observableOf([]);
       })
     ).subscribe((data: Dish[]) => {
-        this.dishes = data;
+      this.dishes = data;
     });
   }
 }

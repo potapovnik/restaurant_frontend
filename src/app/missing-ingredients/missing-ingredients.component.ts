@@ -1,7 +1,8 @@
 import {AfterViewInit, Component} from '@angular/core';
 
-import {MissingIngredient} from './MissingIngredient';
+import {MissingIngredient} from '../utils/MissingIngredient';
 import {IngredientService} from '../ingredients/ingredient.service';
+import {switchMap} from 'rxjs/operators';
 
 
 @Component({
@@ -13,16 +14,16 @@ export class MissingIngredientsComponent implements AfterViewInit {
 
   columnsToDisplay = ['id', 'name', 'measure', 'amount', 'needAmount'];
   missingIngredients: MissingIngredient[];
-  resultsLength = 0;
 
   constructor(private ingredientService: IngredientService) {
   }
 
   ngAfterViewInit() {
-    this.getMissingIngredients();
-  }
-
-  getMissingIngredients() {
-    this.ingredientService.getMissingIngredients().subscribe((data: MissingIngredient[]) => this.missingIngredients = data);
+    this.ingredientService.updateMissingIngredients().subscribe((data: MissingIngredient[]) => this.missingIngredients = data);
+    this.ingredientService.refreshMissingIngredients$.pipe(
+      switchMap(() => {
+        return this.ingredientService.updateMissingIngredients();
+      }))
+      .subscribe((data: MissingIngredient[]) => this.missingIngredients = data);
   }
 }

@@ -1,11 +1,11 @@
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
-import {Ingredient} from './Ingredient';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {merge, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {IngredientService} from '../ingredients/ingredient.service';
+import {Ingredient} from '../utils/Ingredient';
 
 
 @Component({
@@ -22,9 +22,7 @@ import {IngredientService} from '../ingredients/ingredient.service';
 })
 export class IngredientsReadOnlyComponent implements AfterViewInit {
   ingredients: Ingredient[];
-  columnsToDisplay = ['id', 'name', 'measure'];
-  columnsToDisplayMissing = ['id', 'name', 'measure'];
-  missingIngredients: Ingredient[];
+  columnsToDisplay = ['id', 'name', 'measure', 'summaryAmount'];
   resultsLength = 0;
   expandedElement: Ingredient | null;
 
@@ -35,7 +33,6 @@ export class IngredientsReadOnlyComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.getMissingIngredients();
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
@@ -52,11 +49,16 @@ export class IngredientsReadOnlyComponent implements AfterViewInit {
           return observableOf([]);
         })
       ).subscribe((data: Ingredient[]) => {
+      data.forEach(function (a: Ingredient) {
+        let sum = 0;
+        for (let i = 0; i < a.parts.length; i++) {
+          sum += a.parts[i].value;
+
+        }
+        a.summaryAmount = sum;
+        a.summaryVolume = sum * a.volumePerUnit;
+      });
       this.ingredients = data;
     });
-  }
-
-  getMissingIngredients() {
-    // this.ingredientService.getMissingIngredients().subscribe((data: Ingredient[]) => this.missingIngredients = data);
   }
 }
