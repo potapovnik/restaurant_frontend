@@ -38,7 +38,7 @@ export class WaiterOrdersComponent implements OnInit {
   reservedIngredients: number[] = [];
 
   constructor(private userService: UsersService, private orderService: OrdersService
-    , private dishService: DishService, private historyService: HistoryService) {
+    , private dishService: DishService, private historyService: HistoryService, private ingredientService: IngredientService) {
 
   }
 
@@ -67,6 +67,12 @@ export class WaiterOrdersComponent implements OnInit {
     return Math.max(...tempIngredients);
   }
 
+  cancelOrder() {
+    this.orderDishList = [];
+    this.reservedIngredients = [];
+    this.nameCountDishList = [];
+  }
+
   addToOrderDish(dish: Dish) {
     this.orderDishList.push(new OrderDish());
     this.nameCountDishList.push(new DishView());
@@ -75,10 +81,15 @@ export class WaiterOrdersComponent implements OnInit {
         dish.consist[i].value * this.countOfDishInOrder : this.reservedIngredients[dish.consist[i].ingredient.id] + dish.consist[i].value * this.countOfDishInOrder;
     }
     for (let i = 0; i < this.orderDishList.length; i++) {
-      if (this.orderDishList[i].dish_id === undefined) {
-        this.orderDishList[i].dish_id = dish.id;
+      // if (this.orderDishList[i].dish_id === undefined) {
+      //   this.orderDishList[i].dish_id = dish.id;
+      //   this.orderDishList[i].count = this.countOfDishInOrder;
+      // }
+      if (this.orderDishList[i].dish === undefined) {
+        this.orderDishList[i].dish = dish;
         this.orderDishList[i].count = this.countOfDishInOrder;
       }
+
       if (this.nameCountDishList[i].name === undefined) {
         this.nameCountDishList[i].name = dish.name;
         this.nameCountDishList[i].count = this.countOfDishInOrder;
@@ -96,6 +107,14 @@ export class WaiterOrdersComponent implements OnInit {
   }
 
   createOrder() {
+    this.ingredientService.debitIngredients(this.orderDishList).subscribe(
+      (res) => {
+        if (res === true) {
+          // все хорошо, ингредиенты списались, ингредиентов хватило
+        } else {
+          // заказ не возможен, склад пуст, ингредиентов не хватило
+        }
+      });
     this.orderService.createOrder(this.newOrder).subscribe(resp => this.createdOrder = resp);
     this.newHistory = new History();
     console.log(this.createdOrder);

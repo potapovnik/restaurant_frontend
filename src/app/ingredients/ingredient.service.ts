@@ -4,6 +4,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Ingredient, IngredientApi} from '../utils/Ingredient';
 import {IngredientPart} from '../utils/IngredientPart';
 import {MissingIngredient} from '../utils/MissingIngredient';
+import {OrderDish} from '../utils/order.dish';
 
 
 @Injectable({
@@ -20,6 +21,15 @@ export class IngredientService {
 
   updateMissingIngredients(): Observable<MissingIngredient[]> {
     return this.http.get<MissingIngredient[]>(this.ingredientsPath + '/missing', {headers: this.myHeaders});
+  }
+
+  debitIngredients(dishes: OrderDish[]): Observable<boolean> {
+    return this.http.put<boolean>(this.ingredientPartsPath + '/debit', JSON.stringify(dishes), {headers: this.myHeaders});
+  }
+
+  reduceIngredientAmount(ingrId: number, delta: number): Observable<boolean> {
+    return this.http.put<boolean>(this.ingredientPartsPath + '/reduce?ingredientId=' + ingrId + '&delta=' + delta,
+      null, {headers: this.myHeaders});
   }
 
   getUsedStorage(): Observable<number> {
