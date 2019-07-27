@@ -10,7 +10,7 @@ export function validatorIngredientPartValueLessStorage(ingredientService: Ingre
         if (control.value * volumePerUnit <= maxStorageVolume - res) {
           return null;
         } else {
-          return {'NotEnoughSpace': true};
+          return {'notEnoughSpace': true};
         }
       }
     );

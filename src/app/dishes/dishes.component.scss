@@ -3,6 +3,8 @@
 .all-ingredients-table-container {
   position: relative;
   //max-height: 500px;
+  display: flex;
+  flex-direction: column;
   overflow: auto;
 }
 

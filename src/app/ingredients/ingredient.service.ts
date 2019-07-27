@@ -26,6 +26,10 @@ export class IngredientService {
     return this.http.get<number>(this.ingredientPartsPath + '/summaryVolume', {headers: this.myHeaders});
   }
 
+  getSummaryIngredientAmountNotExpired(ingredientId: number): Observable<number> {
+    return this.http.get<number>(this.ingredientPartsPath + '/summary/' + ingredientId, {headers: this.myHeaders});
+  }
+
   checkIngredientNameUnique(name: string): Observable<boolean> {
     return this.http.get<boolean>(this.ingredientsPath + '/check?name=' + name, {headers: this.myHeaders});
   }

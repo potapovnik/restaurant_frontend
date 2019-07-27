@@ -1,5 +1,4 @@
 import {DishConsist} from './DishConsist';
-import {Ingredient} from './Ingredient';
 
 export class Dish {
   id: number;
@@ -8,6 +7,7 @@ export class Dish {
   cost: number;
   type: string;
   consist: DishConsist[];
+  maxCount: number;
 }
 
 export class DishForDb {

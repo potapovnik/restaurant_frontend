@@ -9,6 +9,7 @@ import {DishView} from '../utils/dishView';
 import {HistoryService} from '../utils/history.service';
 import {History} from '../utils/History';
 import {Dish} from '../utils/Dish';
+import {IngredientService} from '../ingredients/ingredient.service';
 
 @Component({
   selector: 'app-waiter-orders',
@@ -34,6 +35,7 @@ export class WaiterOrdersComponent implements OnInit {
   isTakeWaiter: String;
   isGivenCook: String;
   isGivenWaiter: String;
+  reservedIngredients: number[] = [];
 
   constructor(private userService: UsersService, private orderService: OrdersService
     , private dishService: DishService, private historyService: HistoryService) {
@@ -57,10 +59,21 @@ export class WaiterOrdersComponent implements OnInit {
     this.selectedDish = selectedDish;
   }
 
+  usedIngredientsInCurrentOrder(dish: Dish): number {
+    let tempIngredients = [];
+    for (let i = 0; i < dish.consist.length; i++) {
+      tempIngredients[i] = Math.ceil(this.reservedIngredients[dish.consist[i].ingredient.id] === undefined ? 0 : this.reservedIngredients[dish.consist[i].ingredient.id] / dish.consist[i].value);
+    }
+    return Math.max(...tempIngredients);
+  }
 
   addToOrderDish(dish: Dish) {
     this.orderDishList.push(new OrderDish());
     this.nameCountDishList.push(new DishView());
+    for (let i = 0; i < dish.consist.length; i++) {
+      this.reservedIngredients[dish.consist[i].ingredient.id] = this.reservedIngredients[dish.consist[i].ingredient.id] === undefined ?
+        dish.consist[i].value * this.countOfDishInOrder : this.reservedIngredients[dish.consist[i].ingredient.id] + dish.consist[i].value * this.countOfDishInOrder;
+    }
     for (let i = 0; i < this.orderDishList.length; i++) {
       if (this.orderDishList[i].dish_id === undefined) {
         this.orderDishList[i].dish_id = dish.id;

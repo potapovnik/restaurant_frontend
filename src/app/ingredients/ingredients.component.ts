@@ -225,4 +225,10 @@ export class IngredientsComponent implements AfterViewInit {
     }
   }
 
+  getErrorMessage() {
+    return this._newIngredientPartForm.controls['value'].hasError('required') ? 'Не может быть пустым' :
+      this._newIngredientPartForm.controls['value'].hasError('notEnoughSpace') ? 'Не хватит места на складе' :
+        '';
+  }
+
 }

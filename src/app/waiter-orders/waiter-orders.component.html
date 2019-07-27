@@ -12,7 +12,7 @@
                                  (click)="onSelectedDish(dish)">
               <mat-expansion-panel-header>
                 <mat-panel-title>
-                  {{dish.name}}
+                  {{dish.name}} {{dish.maxCount - usedIngredientsInCurrentOrder(dish)}}
                 </mat-panel-title>
               </mat-expansion-panel-header>
               <mat-form-field>
@@ -38,6 +38,9 @@
     </mat-form-field>
     <button mat-button (click)="createOrder()">
       Создать заказ
+    </button>
+    <button mat-button (click)="createOrder()">
+      Отменить заказ
     </button>
   </div>
   <div class="containerCookList">

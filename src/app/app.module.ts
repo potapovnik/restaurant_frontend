@@ -14,7 +14,7 @@ import {
   MatSelectModule,
   MatOptionModule, MatCardModule, MatExpansionModule,
   MatTableModule, MatPaginatorModule, MatSortModule,
-  MatDatepickerModule, MatNativeDateModule, MatCheckboxModule
+  MatDatepickerModule, MatNativeDateModule, MatCheckboxModule, MatIconModule
 } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { IngredientsComponent } from './ingredients/ingredients.component';
@@ -28,6 +28,7 @@ import {IngredientsReadOnlyComponent} from './ingredients-read-only/ingredients-
 import {MissingIngredientsComponent} from './missing-ingredients/missing-ingredients.component';
 import {StorageComponent} from './storage/storage.component';
 import {CommonModule} from '@angular/common';
+import {LoginformComponent} from './loginform/loginform.component';
 
 
 @NgModule({
@@ -43,6 +44,8 @@ import {CommonModule} from '@angular/common';
     IngredientsReadOnlyComponent,
     MissingIngredientsComponent,
     StorageComponent,
+    LoginformComponent,
+
 
   ],
   imports: [
@@ -69,6 +72,8 @@ import {CommonModule} from '@angular/common';
     MatCheckboxModule,
     CommonModule,
     ReactiveFormsModule,
+    MatIconModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]
