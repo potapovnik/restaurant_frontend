@@ -1,10 +1,12 @@
 import {Dish} from './Dish';
 
 export class OrderDish {
-  id: number;
+  id: OrderDishId;
   count: number;
   dish: Dish;
-  // dish_id: number;
-  order_id: number;
+}
 
+export class OrderDishId {
+  dishId: number;
+  orderId: number;
 }

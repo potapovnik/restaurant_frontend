@@ -15,10 +15,15 @@
                   {{dish.name}} {{dish.maxCount - usedIngredientsInCurrentOrder(dish)}}
                 </mat-panel-title>
               </mat-expansion-panel-header>
-              <mat-form-field>
-                <input matInput required [(ngModel)]="countOfDishInOrder" placeholder=Количество class="inputCount">
-              </mat-form-field>
-              <button mat-raised-button class="addDish" (click)="addToOrderDish(dish)">добавить</button>
+              <ng-container [formGroup]="_dishCountForm">
+                <mat-form-field>
+                  <mat-label>Количество</mat-label>
+                  <input matInput formControlName="count" class="inputCount">
+                </mat-form-field>
+              </ng-container>
+              <button mat-raised-button class="addDish" [disabled]="_dishCountForm.invalid"
+                      (click)="addToOrderDish(dish, _dishCountForm.controls['count'].value)">добавить
+              </button>
             </mat-expansion-panel>
           </mat-accordion>
         </div>
@@ -29,8 +34,23 @@
 
     <div>Повар: {{choosedCook.name}} {{choosedCook.surname}}</div>
     <div>Блюда:
-      <ul *ngFor="let dishView of nameCountDishList">
-        <li>{{dishView.name}} - {{dishView.count}}</li>
+      <ul *ngFor="let dishView of newOrder.consist">
+        <li>
+          <table>
+            <tr>
+              <td>
+                <button (click)="minusOneDish(dishView.dish)">-</button>
+                {{dishView.dish.name}} - {{dishView.count}}
+                <button (click)="plusOneDish(dishView.dish)">+</button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <button (click)="removeDishFromOrder(dishView.dish)"> Убрать</button>
+              </td>
+            </tr>
+          </table>
+        </li>
       </ul>
     </div>
     <mat-form-field>

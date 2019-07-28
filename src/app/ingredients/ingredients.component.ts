@@ -178,35 +178,42 @@ export class IngredientsComponent implements AfterViewInit {
         inArrayIndex = id;
       }
     }
-    if (confirm('Вы точно хотите удалить ингредиент ' + name + ' и все его партии?')) {
-      this.ingredientService.deleteIngredient(id).pipe(catchError(() => {
-        return observableOf([]);
-      })).pipe(
-        switchMap(() => {
-          return this.ingredientService
-            .getAllIngredients(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
-        }),
-        map(data => {
-          this.resultsLength = data.totalCount;
-          return data.items;
-        }),
-        catchError(() => {
-          return observableOf([]);
-        })
-      ).subscribe((data: Ingredient[]) => {
-        data.forEach(function (a: Ingredient) {
-          let sum = 0;
-          for (let i = 0; i < a.parts.length; i++) {
-            sum += a.parts[i].value;
-          }
-          a.summaryAmount = sum;
-          a.summaryVolume = sum * a.volumePerUnit;
-        });
-        this.ingredients = data;
-        this.storageService.refreshUsedStorage$.next(true);
-        this.ingredientService.refreshMissingIngredients$.next(true);
-      });
-    }
+    this.ingredientService.isUsedIngredientInDish(id).subscribe((isUsed: boolean) => {
+      if (isUsed) {
+        alert('Нельзя удалить ингредиент ' + name + ', он используется в блюде.');
+      } else {
+        if (confirm('Вы точно хотите удалить ингредиент ' + name + ' и все его партии?')) {
+          this.ingredientService.deleteIngredient(id).pipe(catchError(() => {
+            return observableOf([]);
+          })).pipe(
+            switchMap(() => {
+              return this.ingredientService
+                .getAllIngredients(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+            }),
+            map(data => {
+              this.resultsLength = data.totalCount;
+              return data.items;
+            }),
+            catchError(() => {
+              return observableOf([]);
+            })
+          ).subscribe((data: Ingredient[]) => {
+            data.forEach(function (a: Ingredient) {
+              let sum = 0;
+              for (let i = 0; i < a.parts.length; i++) {
+                sum += a.parts[i].value;
+              }
+              a.summaryAmount = sum;
+              a.summaryVolume = sum * a.volumePerUnit;
+            });
+            this.ingredients = data;
+            this.storageService.refreshUsedStorage$.next(true);
+            this.ingredientService.refreshMissingIngredients$.next(true);
+          });
+        }
+      }
+    });
+
   }
 
   deleteIngPart(ingr: Ingredient, part: IngredientPart) {

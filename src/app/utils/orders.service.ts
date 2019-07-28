@@ -20,6 +20,11 @@ export class OrdersService {
     return this.http.post<Orders>(url, JSON.stringify(order), {headers: this.head});
   }
 
+  updateOrder(order: Orders): Observable<Orders> {
+    const url = this.orders;
+    return this.http.put<Orders>(url, JSON.stringify(order), {headers: this.head});
+  }
+
   getAll(): Observable<Orders[]> {
     const url = this.orders + '/getAll';
     console.log(url + '- get all order');

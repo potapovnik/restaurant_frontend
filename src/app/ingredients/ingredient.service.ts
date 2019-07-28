@@ -19,6 +19,10 @@ export class IngredientService {
   constructor(private http: HttpClient) {
   }
 
+  isUsedIngredientInDish(ingrId: number): Observable<boolean> {
+    return this.http.get<boolean>(this.ingredientsPath + '/isUsed/' + ingrId, {headers: this.myHeaders});
+  }
+
   updateMissingIngredients(): Observable<MissingIngredient[]> {
     return this.http.get<MissingIngredient[]>(this.ingredientsPath + '/missing', {headers: this.myHeaders});
   }

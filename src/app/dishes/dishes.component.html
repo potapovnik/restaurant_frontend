@@ -2,7 +2,7 @@
 
 <div class="all-ingredients-table-container">
   <mat-form-field>
-    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Фильтр" name="filter">
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Фильтр по названию" name="filter">
   </mat-form-field>
   <table mat-table [dataSource]="dishes" multiTemplateDataRows matSort matSortActive="id" matSortDisableClear
          matSortDirection="asc">
