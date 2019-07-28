@@ -21,16 +21,25 @@
       Заказы
     </a>
   </div>
-    <div>
-      <a mat-button [routerLink]="'/waiterOrders'">
-        Заказы
-      </a>
-    </div>
-    <div>
-      <a mat-button [routerLink]="'/dishes'">
-        Настройка меню
-      </a>
-    </div>
-
+  <div>
+    <a mat-button [routerLink]="'/waiterOrders'">
+      Заказы
+    </a>
+  </div>
+  <div>
+    <a mat-button [routerLink]="'/allOrders'">
+      Заказы
+    </a>
+  </div>
+  <div>
+    <a mat-button [routerLink]="'/dishes'">
+      Настройка меню
+    </a>
+  </div>
+  <div>
+    <a mat-button [routerLink]="'/history'">
+      Статистика
+    </a>
+  </div>
 </mat-toolbar>
 <router-outlet></router-outlet>

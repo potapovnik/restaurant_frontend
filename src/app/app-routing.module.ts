@@ -6,6 +6,8 @@ import {DishesComponent} from './dishes/dishes.component';
 import {CookOrdersComponent} from './cook-orders/cook-orders.component';
 import {WaiterOrdersComponent} from './waiter-orders/waiter-orders.component';
 import {IngredientsReadOnlyComponent} from './ingredients-read-only/ingredients-read.component';
+import {AllOrdersComponent} from './all-orders/all-orders.component';
+import {HistoryComponent} from './history/history.component';
 
 const routes: Routes = [
   {path: 'users',
@@ -14,6 +16,11 @@ const routes: Routes = [
   },
   {path: 'ingredients',
     component: IngredientsComponent,
+
+  },
+  {
+    path: 'history',
+    component: HistoryComponent,
 
   },
   {
@@ -34,6 +41,10 @@ const routes: Routes = [
     path: 'waiterOrders',
     component: WaiterOrdersComponent,
   },
+  {
+    path: 'allOrders',
+    component: AllOrdersComponent,
+  }
 
 ];
 

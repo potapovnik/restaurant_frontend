@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Orders} from '../utils/orders';
 import {History} from './History';
+import {Statistic} from './Statistic';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,11 @@ export class HistoryService {
     console.log(url + '- next status of order');
     return this.http.post<History>(url, JSON.stringify(history), {headers: this.head});
 
+  }
+
+  getStatistic(dateFrom: string, dateTo: string): Observable<Statistic> {
+    const url = this.history;
+    return this.http.get<Statistic>(url + '?from=' + dateFrom + '&to=' + dateTo, {headers: this.head});
   }
 
 

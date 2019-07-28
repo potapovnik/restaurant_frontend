@@ -29,6 +29,7 @@ import {MissingIngredientsComponent} from './missing-ingredients/missing-ingredi
 import {StorageComponent} from './storage/storage.component';
 import {CommonModule} from '@angular/common';
 import {LoginformComponent} from './loginform/loginform.component';
+import {HistoryComponent} from './history/history.component';
 
 
 @NgModule({
@@ -45,6 +46,7 @@ import {LoginformComponent} from './loginform/loginform.component';
     MissingIngredientsComponent,
     StorageComponent,
     LoginformComponent,
+    HistoryComponent,
 
 
   ],
