@@ -4,6 +4,7 @@ import {Orders} from '../utils/orders';
 import {OrdersService} from '../utils/orders.service';
 import {HistoryService} from '../utils/history.service';
 import {History} from '../utils/History';
+import {OrdersForHistory} from '../utils/ordersForHistory';
 
 @Component({
   selector: 'app-cook-orders',
@@ -28,16 +29,17 @@ export class CookOrdersComponent implements OnInit {
   }
 
   getAllOrderOfCook() {
-    this.orderService.getAllById(3).subscribe(resp => this.listOfMyOrders = resp); // ИЗменить ID!
+    this.orderService.getAllById(2).subscribe(resp => this.listOfMyOrders = resp); // ИЗменить ID!
   }
 
   updateOrder(order: Orders, status: number) {
     this.newHistory = new History();
+    this.newHistory.order = new OrdersForHistory();
     this.newHistory.user_id = 2; // Изменить на текущий!
-    this.newHistory.order_id = order.id;
-    this.newHistory.status_id = status;
-    this.historyService.nextStatus(this.newHistory).subscribe();
-    this.orderService.getAllById(3).subscribe(resp => this.listOfMyOrders = resp); // ИЗменить ID!
+    this.newHistory.order.id = order.id;
+    this.newHistory.statusId = status;
+    this.historyService.nextStatus(this.newHistory).subscribe(rep =>
+      this.orderService.getAllById(3).subscribe(resp => this.listOfMyOrders = resp)); // ИЗменить ID!);
   }
 
 
@@ -52,7 +54,7 @@ export class CookOrdersComponent implements OnInit {
   selectMyOrder(order: Orders) {
     this.selectedOrder = order;
     for (const hist of order.historyList) {
-      switch (hist.status_id) {
+      switch (hist.statusId) {
         case 1: {
           this.isTakeWaiter = 'Да';
           break;

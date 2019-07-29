@@ -11,6 +11,7 @@ import {History} from '../utils/History';
 import {Dish} from '../utils/Dish';
 import {IngredientService} from '../ingredients/ingredient.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {OrdersForHistory} from '../utils/ordersForHistory';
 
 @Component({
   selector: 'app-waiter-orders',
@@ -170,9 +171,13 @@ export class WaiterOrdersComponent implements OnInit {
               }
             });
           this.newHistory = new History();
-          this.newHistory.order_id = this.createdOrder.id;
-          this.newHistory.status_id = 1;
+          this.newHistory.order = new OrdersForHistory();
+          this.newHistory.order.id = this.createdOrder.id;
+          this.newHistory.statusId = 1;
           this.newHistory.user_id = 1; // Изменить на текующий!
+          this.historyService.nextStatus(this.newHistory).subscribe();
+          this.newHistory.statusId = 2;
+          this.newHistory.user_id = this.choosedCook.id;
           this.historyService.nextStatus(this.newHistory).subscribe();
         }
       );
@@ -182,15 +187,16 @@ export class WaiterOrdersComponent implements OnInit {
     // this.newHistory = new History();
     // console.log(this.createdOrder);
     // this.newHistory.order_id = this.createdOrder.id;
-    // this.newHistory.status_id = 1;
+    // this.newHistory.statusId = 1;
     // this.newHistory.user_id = 1; // Изменить на текующий!
     // this.historyService.nextStatus(this.newHistory).subscribe();
   }
 
   givenOrder(order: Orders) {
     this.newHistory = new History();
-    this.newHistory.order_id = order.id;
-    this.newHistory.status_id = 5;
+    this.newHistory.order = new OrdersForHistory();
+    this.newHistory.order.id = order.id;
+    this.newHistory.statusId = 5;
     this.newHistory.user_id = 2; // Изменить на текующий!
     this.historyService.nextStatus(this.newHistory).subscribe();
   }
@@ -199,7 +205,7 @@ export class WaiterOrdersComponent implements OnInit {
     this.selectedOrder = order;
     this.isChosed = true;
     for (const hist of order.historyList) {
-      switch (hist.status_id) {
+      switch (hist.statusId) {
         case 1: {
           this.isTakeWaiter = 'Да';
           break;

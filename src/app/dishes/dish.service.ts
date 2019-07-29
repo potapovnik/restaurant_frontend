@@ -17,7 +17,7 @@ export class DishService {
   }
 
   getAllDishes(sort: string, order: string, pageIndex: number, pageSize: number, filter: string): Observable<DishApi> {
-    const myHeaders  = new HttpHeaders().set('Content-Type', 'application/json');
+    const myHeaders = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.get<DishApi>(
       this.dishesPath + '?pageIndex=' + pageIndex + '&sortedBy=' + sort + '&pageSize=' + pageSize + '&sortDir=' + order + '&filter=' + filter,
       {headers: myHeaders});
@@ -25,8 +25,9 @@ export class DishService {
 
   getFilteredMenuDishes(filtr: string): Observable<Dish[]> {
     const myHeaders = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http.get<Dish[]>(this.dishesPath + '/inmenu/' + filtr , {headers: myHeaders});
+    return this.http.get<Dish[]>(this.dishesPath + '/inmenu/' + filtr, {headers: myHeaders});
   }
+
   getMenuDishes(): Observable<Dish[]> {
     const myHeaders = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.get<Dish[]>(this.dishesPath + '/inmenu', {headers: myHeaders});
@@ -38,7 +39,7 @@ export class DishService {
   }
 
   deleteDishIngredient(dishId: number, ingId: number): Observable<Object> {
-    const myHeaders  = new HttpHeaders().set('Content-Type', 'application/json');
+    const myHeaders = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.delete(this.dishIngredientPath + '/' + String(dishId) + '/' + String(ingId), {headers: myHeaders});
   }
 

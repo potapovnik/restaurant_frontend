@@ -29,7 +29,7 @@ export class AllOrdersComponent implements OnInit {
   selectMyOrder(order: Orders) {
     this.selectedOrder = order;
     for (const hist of order.historyList) {
-      switch (hist.status_id) {
+      switch (hist.statusId) {
         case 1: {
           this.isTakeWaiter = 'Да';
           break;
