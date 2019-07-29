@@ -6,13 +6,10 @@
   </mat-form-field>
   <mat-form-field>
     <mat-label>Пароль</mat-label>
-    <input [type]="hide ? 'password' : 'text'" matInput formControlName="password">
-    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
-            [attr.aria-pressed]="hide">
-      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-    </button>
+    <input [type]="'password'" matInput formControlName="password">
     <mat-error *ngIf="_loginForm.controls['password'].invalid">{{getErrorPassword()}}</mat-error>
   </mat-form-field>
 </ng-container>
-<button mat-button color="primary">Войти</button>
+<button mat-button color="primary" (click)="handleLoginClick()">Войти</button>
+<button mat-button color="primary" (click)="handleLogOutClick()">Выйти</button>
 

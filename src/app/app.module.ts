@@ -30,6 +30,10 @@ import {StorageComponent} from './storage/storage.component';
 import {CommonModule} from '@angular/common';
 import {LoginformComponent} from './loginform/loginform.component';
 import {HistoryComponent} from './history/history.component';
+import {GuardsCheckEnd, Router} from '@angular/router';
+import {filter, map} from 'rxjs/operators';
+import {AUTH_INITIALIZER} from './auth/currentuser.service';
+import {HTTP_AUTH_INTERCEPTOR_PROVIDER} from './auth/http.interceptor';
 
 
 @NgModule({
@@ -47,7 +51,7 @@ import {HistoryComponent} from './history/history.component';
     StorageComponent,
     LoginformComponent,
     HistoryComponent,
-
+    LoginformComponent,
 
   ],
   imports: [
@@ -77,7 +81,22 @@ import {HistoryComponent} from './history/history.component';
     MatIconModule,
 
   ],
-  providers: [],
+  providers: [
+    HTTP_AUTH_INTERCEPTOR_PROVIDER,
+    AUTH_INITIALIZER
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private router: Router) {
+    router.events.pipe(
+      filter(event => event instanceof GuardsCheckEnd),
+      map(event => (event as GuardsCheckEnd).shouldActivate)
+    ).subscribe(shouldActivate => {
+      if (!shouldActivate) {
+        this.router.navigate(['auth']);
+        // this.router.navigate(['auth', 'login']);
+      }
+    });
+  }
+}

@@ -13,6 +13,7 @@ export class HistoryComponent implements OnInit {
   statistic: Statistic = new Statistic();
   usedIngredients: Map<string, number>;
   soldDishes: Map<string, number>;
+
   columnsToDisplay = ['name', 'count'];
 
   constructor(private fb: FormBuilder, private historyService: HistoryService) {
@@ -43,4 +44,9 @@ export class HistoryComponent implements OnInit {
         }
       });
   }
+}
+
+export interface KeyValue {
+  key: string;
+  value: number;
 }
