@@ -2,49 +2,45 @@
 
 <mat-toolbar class="navigate">
   <div>
-    <a mat-button [routerLink]="'/users'">
+    <a mat-button *appPermit="1" [routerLink]="'/users'">
       Пользователи
     </a>
   </div>
   <div>
-    <a mat-button [routerLink]="'/ingredients'">
+    <a *appPermit="4" mat-button [routerLink]="'/ingredients'">
       Ингредиенты (провизор)
     </a>
   </div>
   <div>
-    <a mat-button [routerLink]="'/ingredients-read'">
+    <a mat-button *appPermit="1" [routerLink]="'/ingredients-read'">
       Ингредиенты(повар, админ)
     </a>
   </div>
   <div>
-    <a mat-button [routerLink]="'/cookOrders'">
+    <a mat-button *appPermit="2" [routerLink]="'/cookOrders'">
       Заказы
     </a>
   </div>
   <div>
-    <a mat-button [routerLink]="'/waiterOrders'">
+    <a mat-button *appPermit="3" [routerLink]="'/waiterOrders'">
       Заказы
     </a>
   </div>
   <div>
-    <a mat-button [routerLink]="'/allOrders'">
+    <a mat-button *appPermit="1" [routerLink]="'/allOrders'">
       Заказы
     </a>
   </div>
   <div>
-    <a mat-button [routerLink]="'/dishes'">
+    <a mat-button *appPermit="1" [routerLink]="'/dishes'">
       Настройка меню
     </a>
   </div>
   <div>
-    <a mat-button [routerLink]="'/history'">
+    <a mat-button *appPermit="1" [routerLink]="'/history'">
       Статистика
     </a>
   </div>
-  <div>
-    <a mat-button [routerLink]="'/auth'">
-      Login
-    </a>
-  </div>
+  <app-user-menu></app-user-menu>
 </mat-toolbar>
 <router-outlet></router-outlet>

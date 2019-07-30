@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {LoginService, Tokens} from './login.service';
 import {CurrentUserService} from '../auth/currentuser.service';
 import {Router} from '@angular/router';
 
@@ -11,9 +10,9 @@ import {Router} from '@angular/router';
 })
 export class LoginformComponent implements OnInit {
   _loginForm: FormGroup;
+  hide = true;
 
-  constructor(private fb: FormBuilder, private loginService: LoginService,
-              private currentUserService: CurrentUserService, private router: Router) {
+  constructor(private fb: FormBuilder, private currentUserService: CurrentUserService, private router: Router) {
     this._loginForm = fb.group({
       login: fb.control(undefined, [Validators.required]),
       password: fb.control(undefined, [Validators.required])
@@ -38,9 +37,5 @@ export class LoginformComponent implements OnInit {
       this._loginForm.controls['login'].value,
       this._loginForm.controls['password'].value
     ).subscribe(() => this.router.navigate(['']));
-  }
-
-  handleLogOutClick() {
-    this.currentUserService.logout();
   }
 }

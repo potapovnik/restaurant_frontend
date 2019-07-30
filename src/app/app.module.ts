@@ -12,9 +12,18 @@ import {
   MatFormFieldModule,
   MatInputModule,
   MatSelectModule,
-  MatOptionModule, MatCardModule, MatExpansionModule,
-  MatTableModule, MatPaginatorModule, MatSortModule,
-  MatDatepickerModule, MatNativeDateModule, MatCheckboxModule, MatIconModule
+  MatOptionModule,
+  MatCardModule,
+  MatExpansionModule,
+  MatTableModule,
+  MatPaginatorModule,
+  MatSortModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatCheckboxModule,
+  MatIconModule,
+  MatMenuModule,
+
 } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { IngredientsComponent } from './ingredients/ingredients.component';
@@ -34,6 +43,8 @@ import {GuardsCheckEnd, Router} from '@angular/router';
 import {filter, map} from 'rxjs/operators';
 import {AUTH_INITIALIZER} from './auth/currentuser.service';
 import {HTTP_AUTH_INTERCEPTOR_PROVIDER} from './auth/http.interceptor';
+import {PermitDirective} from './auth/permit.directive';
+import {UserMenuComponent} from './user-menu/user-menu.component';
 
 
 @NgModule({
@@ -52,6 +63,8 @@ import {HTTP_AUTH_INTERCEPTOR_PROVIDER} from './auth/http.interceptor';
     LoginformComponent,
     HistoryComponent,
     LoginformComponent,
+    PermitDirective,
+    UserMenuComponent,
 
   ],
   imports: [
@@ -79,6 +92,7 @@ import {HTTP_AUTH_INTERCEPTOR_PROVIDER} from './auth/http.interceptor';
     CommonModule,
     ReactiveFormsModule,
     MatIconModule,
+    MatMenuModule,
 
   ],
   providers: [
