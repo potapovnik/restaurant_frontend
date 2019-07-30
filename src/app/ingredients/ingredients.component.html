@@ -30,7 +30,9 @@
     <ng-container matColumnDef="delete">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let ingredient">
-        <button (click)="$event.stopPropagation(); deleteIngredient(ingredient.id)" mat-flat-button color="warn"> Удалить</button>
+        <button (click)="$event.stopPropagation(); deleteIngredient(ingredient)" mat-flat-button color="warn">
+          Удалить
+        </button>
       </td>
     </ng-container>
 

@@ -1,6 +1,7 @@
 .headerOfItems {
   text-align: center;
 }
+
 .page {
   width: 100%;
   height: 700px;
@@ -9,13 +10,16 @@
   flex-wrap: nowrap;
   justify-content: space-between;
 }
+
 .page > * {
   display: flex;
   flex-direction: column;
 }
-.containerOfListOrder{
+
+.containerOfListOrder {
   flex-grow: 1;
 }
+
 .allOther {
   flex-grow: 3;
 }

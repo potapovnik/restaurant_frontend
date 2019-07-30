@@ -1,6 +1,6 @@
 import {APP_INITIALIZER, Injectable, Provider} from '@angular/core';
-import {Observable, of, OperatorFunction, ReplaySubject, throwError} from 'rxjs';
-import {delay, filter, first, map, shareReplay, skip, switchMap, tap} from 'rxjs/operators';
+import {Observable, ReplaySubject, throwError} from 'rxjs';
+import {filter, first, map, shareReplay, skip, switchMap, tap} from 'rxjs/operators';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import * as jwt_decode from 'jwt-decode';
 
@@ -75,7 +75,7 @@ export class CurrentUserService {
     });
   }
 
-  authenticate(username: string, password: string): Observable<UserAuthInfo> {
+  authenticate(_username: string, _password: string): Observable<UserAuthInfo> {
     const options = {
       headers: new HttpHeaders({
         Authorization: `Basic ${btoa('main-client:secret')}`
@@ -86,7 +86,7 @@ export class CurrentUserService {
     // request.append('scope', 'write');
     // request.append('login', username);
     // request.append('password', password);
-    return this.httpClient.post<RawAuthInfo>('/restaurant/login', JSON.stringify({login: username, password: password}), options).pipe(
+    return this.httpClient.post<RawAuthInfo>('/restaurant/login', JSON.stringify({login: _username, password: _password}), options).pipe(
       tap(auth => {
         this._auth$.next(auth);
       }),

@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
-import {Observable, ReplaySubject, Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Ingredient, IngredientApi} from '../utils/Ingredient';
 import {IngredientPart} from '../utils/IngredientPart';
-import {MissingIngredient} from '../utils/MissingIngredient';
+import {Missingingredient} from '../utils/missingingredient';
 import {OrderDish} from '../utils/order.dish';
 
 
@@ -23,8 +23,8 @@ export class IngredientService {
     return this.http.get<boolean>(this.ingredientsPath + '/isUsed/' + ingrId, {headers: this.myHeaders});
   }
 
-  updateMissingIngredients(): Observable<MissingIngredient[]> {
-    return this.http.get<MissingIngredient[]>(this.ingredientsPath + '/missing', {headers: this.myHeaders});
+  updateMissingIngredients(): Observable<Missingingredient[]> {
+    return this.http.get<Missingingredient[]>(this.ingredientsPath + '/missing', {headers: this.myHeaders});
   }
 
   debitIngredients(dishes: OrderDish[]): Observable<boolean> {
@@ -54,19 +54,19 @@ export class IngredientService {
       {headers: this.myHeaders});
   }
 
-  createIngredient(ing: Ingredient): Observable<Object> {
+  createIngredient(ing: Ingredient): Observable<{}> {
     return this.http.post(this.ingredientsPath, JSON.stringify(ing), {headers: this.myHeaders});
   }
 
-  createIngredientPart(ingPart: IngredientPart): Observable<Object> {
+  createIngredientPart(ingPart: IngredientPart): Observable<{}> {
     return this.http.post(this.ingredientPartsPath, JSON.stringify(ingPart), {headers: this.myHeaders});
   }
 
-  deleteIngredient(ingId: number): Observable<Object> {
+  deleteIngredient(ingId: number): Observable<{}> {
     return this.http.delete(this.ingredientsPath + '/' + String(ingId), {headers: this.myHeaders});
   }
 
-  deleteIngredientPart(ingId: number): Observable<Object> {
+  deleteIngredientPart(ingId: number): Observable<{}> {
     return this.http.delete(this.ingredientPartsPath + '/' + String(ingId), {headers: this.myHeaders});
   }
 }

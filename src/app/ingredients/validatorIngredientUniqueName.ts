@@ -7,7 +7,7 @@ export function validatorIngredientUniqueName(ingredientService: IngredientServi
   return (control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
     return ingredientService.checkIngredientNameUnique(control.value).map(
       res => {
-        return (res) ? null : {'NameExists': 'Такой ингредиент уже существует'};
+        return (res) ? null : {NameExists: 'Такой ингредиент уже существует'};
       }
     );
   };

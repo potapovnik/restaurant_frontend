@@ -7,7 +7,8 @@
       <mat-card-content>
         <div class="scrollable">
           <mat-accordion class="allDishes">
-            <mat-expansion-panel *ngFor="let order of listOfAllOrders" class="allDishPanel" (click) = "selectMyOrder(order)">
+            <mat-expansion-panel *ngFor="let order of listOfAllOrders" class="allDishPanel"
+                                 (click)="selectMyOrder(order)">
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   <div class="headerOfItems">

@@ -3,7 +3,7 @@ import {OrderDish} from './order.dish';
 
 export class Orders {
   id: number;
-  comments: String;
+  comments: string;
   historyList: History[];
   consist: OrderDish[];
 }

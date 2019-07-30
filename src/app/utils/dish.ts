@@ -10,13 +10,13 @@ export class Dish {
   maxCount: number;
 }
 
-export class DishForDb {
-  name: string;
-  ismenu: boolean;
-  cost: number;
-  type: string;
-  consist: DishConsist[];
-}
+// export class DishForDb {
+//   name: string;
+//   ismenu: boolean;
+//   cost: number;
+//   type: string;
+//   consist: DishConsist[];
+// }
 
 export interface DishApi {
   items: Dish[];

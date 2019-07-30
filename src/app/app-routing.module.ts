@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
 import {UsersComponent} from './users/users.component';
 import {IngredientsComponent} from './ingredients/ingredients.component';
 import {DishesComponent} from './dishes/dishes.component';
@@ -15,11 +15,13 @@ import {CookGuard} from './auth/cook.guard';
 import {WaiterGuard} from './auth/waiter.guard';
 
 const routes: Routes = [
-  {path: 'users',
+  {
+    path: 'users',
     component: UsersComponent,
     canActivate: [AdminGuard],
   },
-  {path: 'ingredients',
+  {
+    path: 'ingredients',
     component: IngredientsComponent,
     canActivate: [KeeperGuard],
     runGuardsAndResolvers: 'always',
@@ -35,7 +37,8 @@ const routes: Routes = [
     component: IngredientsReadOnlyComponent,
     canActivate: [AdminGuard, CookGuard],
   },
-  {path: 'dishes',
+  {
+    path: 'dishes',
     component: DishesComponent,
     canActivate: [AdminGuard],
   },
@@ -65,4 +68,5 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'})],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

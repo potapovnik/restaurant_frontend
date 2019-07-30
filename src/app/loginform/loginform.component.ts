@@ -1,10 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CurrentUserService, UserAuthInfo} from '../auth/currentuser.service';
 import {Router} from '@angular/router';
 import {catchError} from 'rxjs/operators';
 import {of as observableOf} from 'rxjs';
-import {ValidationError} from 'ajv';
 
 @Component({
   selector: 'app-loginform',
@@ -12,6 +11,8 @@ import {ValidationError} from 'ajv';
   styleUrls: ['./loginform.component.scss']
 })
 export class LoginformComponent implements OnInit {
+  LOGIN = 'login';
+  PASS = 'password';
   _loginForm: FormGroup;
   hide = true;
   isLoadingResults = false;
@@ -27,21 +28,21 @@ export class LoginformComponent implements OnInit {
   }
 
   getErrorLogin() {
-    return this._loginForm.controls['login'].hasError('required') ? 'Не может быть пустым' :
+    return this._loginForm.controls[this.LOGIN].hasError('required') ? 'Не может быть пустым' :
       '';
   }
 
   getErrorPassword() {
-    return this._loginForm.controls['password'].hasError('required') ? 'Не может быть пустым' :
-      this._loginForm.controls['password'].hasError('wrongPass') ? 'Либо в логине, либо в пароле ошибка' :
+    return this._loginForm.controls[this.PASS].hasError('required') ? 'Не может быть пустым' :
+      this._loginForm.controls[this.PASS].hasError('wrongPass') ? 'Либо в логине, либо в пароле ошибка' :
         '';
   }
 
   handleLoginClick() {
     this.isLoadingResults = true;
     this.currentUserService.authenticate(
-      this._loginForm.controls['login'].value,
-      this._loginForm.controls['password'].value
+      this._loginForm.value.login,
+      this._loginForm.value.password
     ).pipe(
       catchError(() => {
 
@@ -50,11 +51,10 @@ export class LoginformComponent implements OnInit {
     ).subscribe((response: UserAuthInfo) => {
       if (response.accessToken == undefined) {
         this.isLoadingResults = false;
-        this._loginForm.controls['password'].setValue('');
+        this._loginForm.setValue({password: ''});
       } else {
         this.router.navigate(['']);
       }
-
     });
   }
 }

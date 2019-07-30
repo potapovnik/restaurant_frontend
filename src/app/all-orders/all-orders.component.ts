@@ -9,10 +9,10 @@ import {Orders} from '../utils/orders';
 })
 export class AllOrdersComponent implements OnInit {
   listOfAllOrders: Orders[];
-  isTakeCook: String;
-  isTakeWaiter: String;
-  isGivenCook: String;
-  isGivenWaiter: String;
+  isTakeCook: string;
+  isTakeWaiter: string;
+  isGivenCook: string;
+  isGivenWaiter: string;
   selectedOrder: Orders;
 
   constructor(private ordersService: OrdersService) {
@@ -26,6 +26,7 @@ export class AllOrdersComponent implements OnInit {
   getAllOrders() {
     this.ordersService.getAll().subscribe(resp => this.listOfAllOrders = resp);
   }
+
   selectMyOrder(order: Orders) {
     this.selectedOrder = order;
     for (const hist of order.historyList) {

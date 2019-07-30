@@ -13,7 +13,7 @@ export class UsersComponent implements OnInit {
   createdUser: Users;
   allUsers: Users[];
   allRoles: Role[];
-  isChosed: Boolean;
+  isChosed: boolean;
 
   constructor(private userService: UsersService) {
   }

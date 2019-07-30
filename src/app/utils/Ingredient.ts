@@ -1,4 +1,4 @@
-import {IngredientPart} from './IngredientPart';
+import {IngredientPart} from './ingredientpart';
 
 export class Ingredient {
   id: number;

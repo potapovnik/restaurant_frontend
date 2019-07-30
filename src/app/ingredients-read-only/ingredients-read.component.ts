@@ -49,11 +49,10 @@ export class IngredientsReadOnlyComponent implements AfterViewInit {
           return observableOf([]);
         })
       ).subscribe((data: Ingredient[]) => {
-      data.forEach(function (a: Ingredient) {
+      data.forEach((a: Ingredient) => {
         let sum = 0;
-        for (let i = 0; i < a.parts.length; i++) {
-          sum += a.parts[i].value;
-
+        for (const part of a.parts) {
+          sum += part.value;
         }
         a.summaryAmount = sum;
         a.summaryVolume = sum * a.volumePerUnit;

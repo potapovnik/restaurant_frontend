@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Dish, DishApi} from '../utils/Dish';
-import {DishConsist} from '../utils/DishConsist';
+import {Dish, DishApi} from '../utils/dish';
+import {DishConsist} from '../utils/dishconsist';
 
 
 @Injectable({
@@ -19,7 +19,8 @@ export class DishService {
   getAllDishes(sort: string, order: string, pageIndex: number, pageSize: number, filter: string): Observable<DishApi> {
     const myHeaders = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.get<DishApi>(
-      this.dishesPath + '?pageIndex=' + pageIndex + '&sortedBy=' + sort + '&pageSize=' + pageSize + '&sortDir=' + order + '&filter=' + filter,
+      this.dishesPath + '?pageIndex=' + pageIndex + '&sortedBy=' + sort +
+      '&pageSize=' + pageSize + '&sortDir=' + order + '&filter=' + filter,
       {headers: myHeaders});
   }
 
@@ -33,17 +34,17 @@ export class DishService {
     return this.http.get<Dish[]>(this.dishesPath + '/inmenu', {headers: myHeaders});
   }
 
-  createDish(dish: Dish): Observable<Object> {
+  createDish(dish: Dish): Observable<{}> {
     const myHeaders = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.post(this.dishesPath, JSON.stringify(dish), {headers: myHeaders});
   }
 
-  deleteDishIngredient(dishId: number, ingId: number): Observable<Object> {
+  deleteDishIngredient(dishId: number, ingId: number): Observable<{}> {
     const myHeaders = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.delete(this.dishIngredientPath + '/' + String(dishId) + '/' + String(ingId), {headers: myHeaders});
   }
 
-  createDishConsist(newCons: DishConsist): Observable<Object> {
+  createDishConsist(newCons: DishConsist): Observable<{}> {
     const myHeaders = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.post(this.dishIngredientPath, JSON.stringify(newCons), {headers: myHeaders});
   }

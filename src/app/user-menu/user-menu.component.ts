@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {CurrentUserService} from '../auth/currentuser.service';
 
 @Component({
@@ -10,11 +10,9 @@ import {CurrentUserService} from '../auth/currentuser.service';
 })
 export class UserMenuComponent implements OnInit {
 
-  public auth$ = this.currentUserService.auth$;
+  public auth$ = this.currentUserService.auth$; // не убирать
 
-  constructor(private currentUserService: CurrentUserService,
-              private router: Router,
-              private route: ActivatedRoute) {
+  constructor(private currentUserService: CurrentUserService, private router: Router) { // private route: ActivatedRoute
   }
 
   ngOnInit() {
@@ -22,6 +20,6 @@ export class UserMenuComponent implements OnInit {
 
   handleLogoutClick() {
     this.currentUserService.logout();
-    this.router.navigateByUrl(this.router.url);
+    this.router.navigate(['']); // ByUrl(this.router.url);
   }
 }

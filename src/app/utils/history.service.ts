@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {Orders} from '../utils/orders';
 import {History} from './History';
-import {Statistic} from './Statistic';
+import {Statistic} from './statistic';
 
 @Injectable({
   providedIn: 'root'

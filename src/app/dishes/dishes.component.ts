@@ -1,14 +1,13 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {Dish} from '../utils/Dish';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {Dish} from '../utils/dish';
 import {DishService} from './dish.service';
 import {Ingredient, IngredientApi} from '../utils/Ingredient';
 import {IngredientService} from '../ingredients/ingredient.service';
-import {DishConsist, EmbeddedId} from '../utils/DishConsist';
+import {DishConsist, EmbeddedId} from '../utils/dishconsist';
 import {MatPaginator, MatSort} from '@angular/material';
-import {BehaviorSubject, merge, Observable, of as observableOf} from 'rxjs';
+import {BehaviorSubject, merge, of as observableOf} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap} from 'rxjs/operators';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {StorageService} from '../storage/storage.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
@@ -26,8 +25,6 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 export class DishesComponent implements AfterViewInit {
   dishes: Dish[];
   ingredients: Ingredient[];
-  // newDish: Dish = new Dish();
-  // editedDish: Dish = new Dish();
   filter$: BehaviorSubject<string> = new BehaviorSubject<string>('');
   filter = '';
   newConsist: DishConsist = new DishConsist();
@@ -57,12 +54,15 @@ export class DishesComponent implements AfterViewInit {
   }
 
   setEditDishForm(id: number, name: string, type: string, cost: number, ismenu: boolean) {
+    /* tslint:disable:no-string-literal */
     this._editDishForm.controls['id'].setValue(id);
     this._editDishForm.controls['name'].setValue(name);
     this._editDishForm.controls['type'].setValue(type);
     this._editDishForm.controls['cost'].setValue(cost);
     this._editDishForm.controls['ismenu'].setValue(ismenu);
+    /* tslint:enable:no-string-literal */
   }
+
   ngAfterViewInit() {
     this.filter$.pipe(
       distinctUntilChanged(), debounceTime(300), map(data => {
@@ -104,16 +104,12 @@ export class DishesComponent implements AfterViewInit {
 
   applyFilter(value: string) {
     this.filter$.next(value);
-    // this.dishesService.getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.fil
   }
 
   getAllIngredients() {
-    this.ingredientService.getAllIngredients('id', '', 0, 1000).subscribe((data: IngredientApi) => this.ingredients = data.items);
+    this.ingredientService.getAllIngredients('id', '', 0, 10000)
+      .subscribe((data: IngredientApi) => this.ingredients = data.items);
   }
-
-  // chooseDish(choosed: Dish) {
-  //   this.editedDish = choosed;
-  // }
 
   updateDish() {
     this.dishesService.createDish(this._editDishForm.value).pipe(

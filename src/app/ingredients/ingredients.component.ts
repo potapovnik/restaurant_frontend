@@ -8,9 +8,8 @@ import {merge, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {StorageService} from '../storage/storage.service';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {validatorIngredientUniqueName} from './validatorIngredientUniqueName';
-import {validatorIngredientPartValueLessStorage} from './validatorIngredientPartValueLessStorage';
 
 
 @Component({
@@ -26,10 +25,10 @@ import {validatorIngredientPartValueLessStorage} from './validatorIngredientPart
   ],
 })
 export class IngredientsComponent implements AfterViewInit {
+  VALUE = 'value';
   ingredients: Ingredient[];
   columnsToDisplay = ['id', 'name', 'measure', 'summaryAmount', 'volumePerUnit', 'summaryVolume', 'delete'];
   newIngredient: Ingredient = new Ingredient();
-  // newIngredientPart: IngredientPart = new IngredientPart();
   resultsLength = 0;
   expandedElement: Ingredient | null;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
@@ -38,8 +37,6 @@ export class IngredientsComponent implements AfterViewInit {
   _newIngredientPartForm: FormGroup;
   freeStorageVolume: number;
   maxStorageVolume: number;
-
-  // curIngredietnVolmePerUnit: number;
 
   constructor(private ingredientService: IngredientService, private storageService: StorageService, private fb: FormBuilder) {
     this._newIngredientForm = fb.group({
@@ -57,8 +54,8 @@ export class IngredientsComponent implements AfterViewInit {
   changeFormValidator(id: number, ingrVolumePerUnit: number) {
     this._newIngredientPartForm.reset();
     this._newIngredientPartForm.patchValue({ingredientId: id});
-    this._newIngredientPartForm.controls['value'].clearValidators();
-    this._newIngredientPartForm.controls['value'].setValidators(
+    this._newIngredientPartForm.controls[this.VALUE].clearValidators();
+    this._newIngredientPartForm.controls[this.VALUE].setValidators(
       [Validators.required, Validators.min(0.0000000001), Validators.max(this.freeStorageVolume / ingrVolumePerUnit)]);
   }
 
@@ -90,11 +87,10 @@ export class IngredientsComponent implements AfterViewInit {
           return observableOf([]);
         })
       ).subscribe((data: Ingredient[]) => {
-      data.forEach(function (a: Ingredient) {
+      data.forEach((a: Ingredient) => {
         let sum = 0;
-        for (let i = 0; i < a.parts.length; i++) {
-          sum += a.parts[i].value;
-
+        for (const part of a.parts) {
+          sum += part.value;
         }
         a.summaryAmount = sum;
         a.summaryVolume = sum * a.volumePerUnit;
@@ -118,10 +114,10 @@ export class IngredientsComponent implements AfterViewInit {
         return observableOf([]);
       })
     ).subscribe((data: Ingredient[]) => {
-      data.forEach(function (a: Ingredient) {
+      data.forEach((a: Ingredient) => {
         let sum = 0;
-        for (let i = 0; i < a.parts.length; i++) {
-          sum += a.parts[i].value;
+        for (const part of a.parts) {
+          sum += part.value;
         }
         a.summaryAmount = sum;
         a.summaryVolume = sum * a.volumePerUnit;
@@ -135,9 +131,6 @@ export class IngredientsComponent implements AfterViewInit {
   }
 
   createIngPart() {
-
-    // this.newIngredientPart.ingredientId = ingId;
-    // this.newIngredientPart.id = undefined;
     this.ingredientService.createIngredientPart(this._newIngredientPartForm.value)
       .pipe(
         switchMap(() => {
@@ -152,11 +145,10 @@ export class IngredientsComponent implements AfterViewInit {
           return observableOf([]);
         })
       ).subscribe((data: Ingredient[]) => {
-      data.forEach(function (a: Ingredient) {
+      data.forEach((a: Ingredient) => {
         let sum = 0;
-        for (let i = 0; i < a.parts.length; i++) {
-          sum += a.parts[i].value;
-
+        for (const part of a.parts) {
+          sum += part.value;
         }
         a.summaryAmount = sum;
         a.summaryVolume = sum * a.volumePerUnit;
@@ -164,26 +156,17 @@ export class IngredientsComponent implements AfterViewInit {
       this.ingredients = data;
       this.ingredientService.refreshMissingIngredients$.next(true);
       this.storageService.refreshUsedStorage$.next(true);
-      // this._newIngredientPartForm.reset();
     });
 
   }
 
-  deleteIngredient(id: number) {
-    let name: string;
-    let inArrayIndex: number;
-    for (let i = 0; i < this.ingredients.length; i++) {
-      if (this.ingredients[i].id === id) {
-        name = this.ingredients[i].name;
-        inArrayIndex = id;
-      }
-    }
-    this.ingredientService.isUsedIngredientInDish(id).subscribe((isUsed: boolean) => {
+  deleteIngredient(ingredient: Ingredient) {
+    this.ingredientService.isUsedIngredientInDish(ingredient.id).subscribe((isUsed: boolean) => {
       if (isUsed) {
-        alert('Нельзя удалить ингредиент ' + name + ', он используется в блюде.');
+        alert('Нельзя удалить ингредиент ' + ingredient.name + ', он используется в блюде.');
       } else {
-        if (confirm('Вы точно хотите удалить ингредиент ' + name + ' и все его партии?')) {
-          this.ingredientService.deleteIngredient(id).pipe(catchError(() => {
+        if (confirm('Вы точно хотите удалить ингредиент ' + ingredient.name + ' и все его партии?')) {
+          this.ingredientService.deleteIngredient(ingredient.id).pipe(catchError(() => {
             return observableOf([]);
           })).pipe(
             switchMap(() => {
@@ -198,10 +181,10 @@ export class IngredientsComponent implements AfterViewInit {
               return observableOf([]);
             })
           ).subscribe((data: Ingredient[]) => {
-            data.forEach(function (a: Ingredient) {
+            data.forEach((a: Ingredient) => {
               let sum = 0;
-              for (let i = 0; i < a.parts.length; i++) {
-                sum += a.parts[i].value;
+              for (const part of a.parts) {
+                sum += part.value;
               }
               a.summaryAmount = sum;
               a.summaryVolume = sum * a.volumePerUnit;
@@ -213,7 +196,6 @@ export class IngredientsComponent implements AfterViewInit {
         }
       }
     });
-
   }
 
   deleteIngPart(ingr: Ingredient, part: IngredientPart) {
@@ -224,8 +206,8 @@ export class IngredientsComponent implements AfterViewInit {
         this.storageService.refreshUsedStorage$.next(true);
       });
       let sum = 0;
-      for (let i = 0; i < this.ingredients[this.ingredients.indexOf(ingr)].parts.length; i++) {
-        sum += this.ingredients[this.ingredients.indexOf(ingr)].parts[i].value;
+      for (const partOfIngredient of this.ingredients[this.ingredients.indexOf(ingr)].parts) {
+        sum += partOfIngredient.value;
       }
       this.ingredients[this.ingredients.indexOf(ingr)].summaryAmount = sum;
       this.ingredients[this.ingredients.indexOf(ingr)].summaryVolume = sum * this.ingredients[this.ingredients.indexOf(ingr)].volumePerUnit;
@@ -233,8 +215,8 @@ export class IngredientsComponent implements AfterViewInit {
   }
 
   getErrorMessage() {
-    return this._newIngredientPartForm.controls['value'].hasError('required') ? 'Не может быть пустым' :
-      this._newIngredientPartForm.controls['value'].hasError('notEnoughSpace') ? 'Не хватит места на складе' :
+    return this._newIngredientPartForm.controls[this.VALUE].hasError('required') ? 'Не может быть пустым' :
+      this._newIngredientPartForm.controls[this.VALUE].hasError('notEnoughSpace') ? 'Не хватит места на складе' :
         '';
   }
 

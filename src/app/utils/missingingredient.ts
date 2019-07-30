@@ -1,4 +1,4 @@
-export class MissingIngredient {
+export class Missingingredient {
   id: number;
   name: string;
   measure: string;

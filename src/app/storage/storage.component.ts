@@ -13,7 +13,6 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 export class StorageComponent implements OnInit {
   maxStorageVolume = 0;
   usedStorageVolume = 0;
-  newStorageVolume: number;
   _editStorage: FormGroup;
 
   constructor(private ingredientService: IngredientService, private storageService: StorageService, private fb: FormBuilder) {

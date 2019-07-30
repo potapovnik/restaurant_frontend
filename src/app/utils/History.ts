@@ -1,9 +1,9 @@
-import {OrdersForHistory} from './ordersForHistory';
+import {OrdersForHistory} from './orders.for.history';
 
 export class History {
   id: number;
   time: Date;
   statusId: number;
   order: OrdersForHistory;
-  user_id: number;
+  userId: number;
 }

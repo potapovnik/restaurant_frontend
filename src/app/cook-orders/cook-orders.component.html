@@ -8,9 +8,10 @@
       <mat-card-content>
         <div class="scrollable">
           <mat-accordion class="allDishes">
-            <mat-expansion-panel *ngFor="let myOrder of listOfMyOrders" class="listOfMyOrders" (click) = "selectMyOrder(myOrder)">
+            <mat-expansion-panel *ngFor="let myOrder of listOfMyOrders" class="listOfMyOrders"
+                                 (click)="selectMyOrder(myOrder)">
               <mat-expansion-panel-header>
-                <mat-panel-title >
+                <mat-panel-title>
                   <div class="headerOfItems">
                     Номер заказа: {{myOrder.id}} комментарий: {{myOrder.comments}}
                   </div>

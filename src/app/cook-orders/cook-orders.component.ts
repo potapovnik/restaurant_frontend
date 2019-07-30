@@ -4,7 +4,7 @@ import {Orders} from '../utils/orders';
 import {OrdersService} from '../utils/orders.service';
 import {HistoryService} from '../utils/history.service';
 import {History} from '../utils/History';
-import {OrdersForHistory} from '../utils/ordersForHistory';
+import {OrdersForHistory} from '../utils/orders.for.history';
 
 @Component({
   selector: 'app-cook-orders',
@@ -14,11 +14,12 @@ import {OrdersForHistory} from '../utils/ordersForHistory';
 export class CookOrdersComponent implements OnInit {
   listOfMyOrders: Orders[];
   newHistory: History;
-  isTakeCook: String;
-  isTakeWaiter: String;
-  isGivenCook: String;
-  isGivenWaiter: String;
+  isTakeCook: string;
+  isTakeWaiter: string;
+  isGivenCook: string;
+  isGivenWaiter: string;
   selectedOrder: Orders;
+
   constructor(private userService: UsersService, private orderService: OrdersService, private  historyService: HistoryService) {
   }
 
@@ -35,10 +36,10 @@ export class CookOrdersComponent implements OnInit {
   updateOrder(order: Orders, status: number) {
     this.newHistory = new History();
     this.newHistory.order = new OrdersForHistory();
-    this.newHistory.user_id = 2; // Изменить на текущий!
+    this.newHistory.userId = 2; // Изменить на текущий!
     this.newHistory.order.id = order.id;
     this.newHistory.statusId = status;
-    this.historyService.nextStatus(this.newHistory).subscribe(rep =>
+    this.historyService.nextStatus(this.newHistory).subscribe(() =>
       this.orderService.getAllById(3).subscribe(resp => this.listOfMyOrders = resp)); // ИЗменить ID!);
   }
 

@@ -18,7 +18,7 @@ export class StorageService {
     return this.http.get<RestaurantConfig>(this.configPath, {headers: this.myHeaders});
   }
 
-  setMaxStorageVolume(volume: number): Observable<Object> {
+  setMaxStorageVolume(volume: number): Observable<{}> {
     this.newConfig.maxStorageVolume = volume;
     return this.http.put(this.configPath, JSON.stringify(this.newConfig), {headers: this.myHeaders});
   }

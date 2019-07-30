@@ -1,14 +1,15 @@
 import {Injectable, Provider} from '@angular/core';
 import {
-  HTTP_INTERCEPTORS, HttpErrorResponse,
+  HTTP_INTERCEPTORS,
+  HttpErrorResponse,
   HttpEvent,
-  HttpEventType,
-  HttpHandler, HttpHeaders,
-  HttpInterceptor, HttpParams,
+  HttpHandler,
+  HttpHeaders,
+  HttpInterceptor,
   HttpRequest
 } from '@angular/common/http';
-import {BehaviorSubject, EMPTY, Observable, OperatorFunction, throwError} from 'rxjs';
-import {catchError, filter, first, switchMap, tap} from 'rxjs/operators';
+import {BehaviorSubject, Observable, OperatorFunction, throwError} from 'rxjs';
+import {catchError, filter, first, switchMap} from 'rxjs/operators';
 import {CurrentUserService} from './currentuser.service';
 
 
@@ -41,7 +42,7 @@ export class HttpAuthInterceptor implements HttpInterceptor {
         }
 
         if (tokens.refreshToken == undefined) {
-          return throwError(Error('unauthorized')); // TODO: throw concreate error and navigate to login in handler
+          return throwError(Error('unauthorized'));
         }
 
         // suspend future requests
@@ -81,9 +82,9 @@ export class HttpAuthInterceptor implements HttpInterceptor {
     if (!(error instanceof HttpErrorResponse && error.status === 401)) {
       return throwError(error);
     }
-
-    return throwError(Error('unauthorized after refresh')); // TODO: throw concreate error
-  };
+    this.currentUserService.logout();
+    return throwError(Error('You need to login'));
+  }
 }
 
 export function authInterceptorFactory(currentUserService: CurrentUserService) {

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HistoryService} from '../utils/history.service';
-import {Statistic} from '../utils/Statistic';
+import {Statistic} from '../utils/statistic';
 
 @Component({
   selector: 'app-history',
@@ -13,8 +13,6 @@ export class HistoryComponent implements OnInit {
   statistic: Statistic = new Statistic();
   usedIngredients: Map<string, number>;
   soldDishes: Map<string, number>;
-
-  columnsToDisplay = ['name', 'count'];
 
   constructor(private fb: FormBuilder, private historyService: HistoryService) {
     this._statisticForm = fb.group({
@@ -31,8 +29,8 @@ export class HistoryComponent implements OnInit {
   }
 
   getStatistic() {
-    const from = new Date(this._statisticForm.controls['fromDate'].value);
-    const to = new Date(this._statisticForm.controls['toDate'].value);
+    const from = new Date(this._statisticForm.value.fromDate);
+    const to = new Date(this._statisticForm.value.toDate);
     this.historyService.getStatistic(from.getTime().toString(), to.getTime().toString())
       .subscribe((d: Statistic) => {
         this.statistic = d;
@@ -44,9 +42,4 @@ export class HistoryComponent implements OnInit {
         }
       });
   }
-}
-
-export interface KeyValue {
-  key: string;
-  value: number;
 }

@@ -27,10 +27,10 @@ export class UsersService {
     return this.http.get<Users[]>(url, {headers: this.head});
   }
 
-  deleteUserById(id: number): Observable<Boolean> {
+  deleteUserById(id: number): Observable<boolean> {
     const url = this.users + '/' + id;
     console.log(url + '- delete');
-    return this.http.delete<Boolean>(url, {headers: this.head});
+    return this.http.delete<boolean>(url, {headers: this.head});
   }
 
   update(user: Users): Observable<Users> {

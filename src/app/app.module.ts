@@ -1,9 +1,9 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { UsersComponent } from './users/users.component';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
+import {UsersComponent} from './users/users.component';
 import {HttpClientModule} from '@angular/common/http';
 import {
   MatButtonModule,
@@ -22,17 +22,18 @@ import {
   MatNativeDateModule,
   MatCheckboxModule,
   MatIconModule,
-  MatMenuModule, MatProgressSpinnerModule,
+  MatMenuModule,
+  MatProgressSpinnerModule,
 
 } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { IngredientsComponent } from './ingredients/ingredients.component';
+import {IngredientsComponent} from './ingredients/ingredients.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { DishesComponent } from './dishes/dishes.component';
-import { WaiterOrdersComponent } from './waiter-orders/waiter-orders.component';
-import { CookOrdersComponent } from './cook-orders/cook-orders.component';
-import { UtilsComponent } from './utils/utils.component';
-import { AllOrdersComponent } from './all-orders/all-orders.component';
+import {DishesComponent} from './dishes/dishes.component';
+import {WaiterOrdersComponent} from './waiter-orders/waiter-orders.component';
+import {CookOrdersComponent} from './cook-orders/cook-orders.component';
+import {UtilsComponent} from './utils/utils.component';
+import {AllOrdersComponent} from './all-orders/all-orders.component';
 import {IngredientsReadOnlyComponent} from './ingredients-read-only/ingredients-read.component';
 import {MissingIngredientsComponent} from './missing-ingredients/missing-ingredients.component';
 import {StorageComponent} from './storage/storage.component';
@@ -110,7 +111,6 @@ export class AppModule {
     ).subscribe(shouldActivate => {
       if (!shouldActivate) {
         this.router.navigate(['auth']);
-        // this.router.navigate(['auth', 'login']);
       }
     });
   }
