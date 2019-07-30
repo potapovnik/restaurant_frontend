@@ -6,6 +6,6 @@ export class Users {
   password: string;
   name: string;
   surname: string;
-  role_id: number;
+  roleId: number;
 
 }

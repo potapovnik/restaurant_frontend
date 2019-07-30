@@ -1,7 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CurrentUserService} from '../auth/currentuser.service';
+import {FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
+import {CurrentUserService, UserAuthInfo} from '../auth/currentuser.service';
 import {Router} from '@angular/router';
+import {catchError} from 'rxjs/operators';
+import {of as observableOf} from 'rxjs';
+import {ValidationError} from 'ajv';
 
 @Component({
   selector: 'app-loginform',
@@ -11,6 +14,7 @@ import {Router} from '@angular/router';
 export class LoginformComponent implements OnInit {
   _loginForm: FormGroup;
   hide = true;
+  isLoadingResults = false;
 
   constructor(private fb: FormBuilder, private currentUserService: CurrentUserService, private router: Router) {
     this._loginForm = fb.group({
@@ -29,13 +33,28 @@ export class LoginformComponent implements OnInit {
 
   getErrorPassword() {
     return this._loginForm.controls['password'].hasError('required') ? 'Не может быть пустым' :
-      '';
+      this._loginForm.controls['password'].hasError('wrongPass') ? 'Либо в логине, либо в пароле ошибка' :
+        '';
   }
 
   handleLoginClick() {
+    this.isLoadingResults = true;
     this.currentUserService.authenticate(
       this._loginForm.controls['login'].value,
       this._loginForm.controls['password'].value
-    ).subscribe(() => this.router.navigate(['']));
+    ).pipe(
+      catchError(() => {
+
+        return observableOf({});
+      })
+    ).subscribe((response: UserAuthInfo) => {
+      if (response.accessToken == undefined) {
+        this.isLoadingResults = false;
+        this._loginForm.controls['password'].setValue('');
+      } else {
+        this.router.navigate(['']);
+      }
+
+    });
   }
 }

@@ -22,7 +22,7 @@ import {
   MatNativeDateModule,
   MatCheckboxModule,
   MatIconModule,
-  MatMenuModule,
+  MatMenuModule, MatProgressSpinnerModule,
 
 } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -93,6 +93,7 @@ import {UserMenuComponent} from './user-menu/user-menu.component';
     ReactiveFormsModule,
     MatIconModule,
     MatMenuModule,
+    MatProgressSpinnerModule,
 
   ],
   providers: [

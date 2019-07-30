@@ -58,8 +58,7 @@ const routes: Routes = [
   {
     path: 'auth',
     component: LoginformComponent,
-  }
-
+  },
 ];
 
 @NgModule({

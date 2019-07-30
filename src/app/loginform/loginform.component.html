@@ -1,4 +1,4 @@
-<ng-container [formGroup]="_loginForm">
+<ng-container *ngIf="!isLoadingResults" [formGroup]="_loginForm">
   <mat-form-field>
     <mat-label>Логин</mat-label>
     <input matInput formControlName="login">
@@ -13,6 +13,7 @@
     </button>
     <mat-error *ngIf="_loginForm.controls['password'].invalid">{{getErrorPassword()}}</mat-error>
   </mat-form-field>
+  <button mat-button [disabled]="_loginForm.invalid" color="primary" (click)="handleLoginClick()">Войти</button>
 </ng-container>
-<button mat-button color="primary" (click)="handleLoginClick()">Войти</button>
 
+<mat-spinner *ngIf="isLoadingResults"></mat-spinner>
