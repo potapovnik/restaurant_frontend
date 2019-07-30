@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {IngredientService} from '../ingredients/ingredient.service';
 import {switchMap} from 'rxjs/operators';
 import {StorageService} from './storage.service';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 
 @Component({
@@ -37,7 +37,7 @@ export class StorageComponent implements OnInit {
   }
 
   changeMaxStorageVolume() {
-    this.storageService.setMaxStorageVolume(this._editStorage.value.value).pipe(switchMap(() => {
+    this.storageService.setMaxStorageVolume((this._editStorage.value as FormControl).value as number).pipe(switchMap(() => {
       return this.storageService.getMaxStorageVolume();
     })).subscribe(data => this.maxStorageVolume = data.maxStorageVolume);
   }

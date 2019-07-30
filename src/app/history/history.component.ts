@@ -29,8 +29,8 @@ export class HistoryComponent implements OnInit {
   }
 
   getStatistic() {
-    const from = new Date(this._statisticForm.value.fromDate);
-    const to = new Date(this._statisticForm.value.toDate);
+    const from = new Date((this._statisticForm.value as {fromDate: string, toDate: string}).fromDate);
+    const to = new Date((this._statisticForm.value as {fromDate: string, toDate: string}).toDate);
     this.historyService.getStatistic(from.getTime().toString(), to.getTime().toString())
       .subscribe((d: Statistic) => {
         this.statistic = d;

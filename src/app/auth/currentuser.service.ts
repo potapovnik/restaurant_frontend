@@ -46,6 +46,7 @@ export class CurrentUserService {
         if (auth == undefined) {
           return undefined;
         }
+        // tslint:disable-next-line:no-unsafe-any
         const accessToken = jwt_decode(auth.authToken) as DecodedAccessToken;
         // const accessToken = jwt_decode(auth.access_token) as DecodedAccessToken;
         return {

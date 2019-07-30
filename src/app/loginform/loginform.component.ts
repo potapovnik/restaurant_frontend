@@ -41,8 +41,8 @@ export class LoginformComponent implements OnInit {
   handleLoginClick() {
     this.isLoadingResults = true;
     this.currentUserService.authenticate(
-      this._loginForm.value.login,
-      this._loginForm.value.password
+      (this._loginForm.value as {login: string, password: string}).login,
+      (this._loginForm.value as {login: string, password: string}).password
     ).pipe(
       catchError(() => {
 

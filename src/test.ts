@@ -7,6 +7,8 @@ import {
   platformBrowserDynamicTesting
 } from '@angular/platform-browser-dynamic/testing';
 
+// tslint:disable
+
 declare const require: any;
 
 // First, initialize the Angular testing environment.

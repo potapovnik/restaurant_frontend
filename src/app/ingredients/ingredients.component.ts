@@ -101,7 +101,7 @@ export class IngredientsComponent implements AfterViewInit {
 
 
   createIng() {
-    this.ingredientService.createIngredient(this._newIngredientForm.value).pipe(
+    this.ingredientService.createIngredient(this._newIngredientForm.value as Ingredient).pipe(
       switchMap(() => {
         return this.ingredientService
           .getAllIngredients(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
@@ -131,7 +131,7 @@ export class IngredientsComponent implements AfterViewInit {
   }
 
   createIngPart() {
-    this.ingredientService.createIngredientPart(this._newIngredientPartForm.value)
+    this.ingredientService.createIngredientPart(this._newIngredientPartForm.value as IngredientPart)
       .pipe(
         switchMap(() => {
           return this.ingredientService

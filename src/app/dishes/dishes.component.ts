@@ -23,6 +23,11 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
   ],
 })
 export class DishesComponent implements AfterViewInit {
+  ID = 'id';
+  NAME = 'name';
+  TYPE = 'type';
+  COST = 'cost';
+  ISMENU = 'ismenu';
   dishes: Dish[];
   ingredients: Ingredient[];
   filter$: BehaviorSubject<string> = new BehaviorSubject<string>('');
@@ -54,13 +59,11 @@ export class DishesComponent implements AfterViewInit {
   }
 
   setEditDishForm(id: number, name: string, type: string, cost: number, ismenu: boolean) {
-    /* tslint:disable:no-string-literal */
-    this._editDishForm.controls['id'].setValue(id);
-    this._editDishForm.controls['name'].setValue(name);
-    this._editDishForm.controls['type'].setValue(type);
-    this._editDishForm.controls['cost'].setValue(cost);
-    this._editDishForm.controls['ismenu'].setValue(ismenu);
-    /* tslint:enable:no-string-literal */
+    this._editDishForm.controls[this.ID].setValue(id);
+    this._editDishForm.controls[this.NAME].setValue(name);
+    this._editDishForm.controls[this.TYPE].setValue(type);
+    this._editDishForm.controls[this.COST].setValue(cost);
+    this._editDishForm.controls[this.ISMENU].setValue(ismenu);
   }
 
   ngAfterViewInit() {
@@ -112,7 +115,7 @@ export class DishesComponent implements AfterViewInit {
   }
 
   updateDish() {
-    this.dishesService.createDish(this._editDishForm.value).pipe(
+    this.dishesService.createDish(this._editDishForm.value as Dish).pipe(
       switchMap(() => {
         return this.dishesService
           .getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter);
@@ -130,7 +133,7 @@ export class DishesComponent implements AfterViewInit {
   }
 
   createDish() {
-    this.dishesService.createDish(this._newDishForm.value).pipe(
+    this.dishesService.createDish(this._editDishForm.value as Dish).pipe(
       switchMap(() => {
         return this.dishesService
           .getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter);

@@ -166,7 +166,7 @@ export class WaiterOrdersComponent implements OnInit {
         () => {
           this.ingredientService.debitIngredients(this.newOrder.consist).subscribe(
             (result) => {
-              if (result === true) {
+              if (result) {
                 // все хорошо, ингредиенты списались, ингредиентов хватило
               } else {
                 // заказ не возможен, склад пуст, ингредиентов не хватило
@@ -176,10 +176,10 @@ export class WaiterOrdersComponent implements OnInit {
           this.newHistory.order = new OrdersForHistory();
           this.newHistory.order.id = this.createdOrder.id;
           this.newHistory.statusId = 1;
-          this.newHistory.user_id = 1; // Изменить на текующий!
+          this.newHistory.userId = 1; // Изменить на текующий!
           this.historyService.nextStatus(this.newHistory).subscribe();
           this.newHistory.statusId = 2;
-          this.newHistory.user_id = this.choosedCook.id;
+          this.newHistory.userId = this.choosedCook.id;
           this.historyService.nextStatus(this.newHistory).subscribe();
         }
       );
@@ -199,7 +199,7 @@ export class WaiterOrdersComponent implements OnInit {
     this.newHistory.order = new OrdersForHistory();
     this.newHistory.order.id = order.id;
     this.newHistory.statusId = 5;
-    this.newHistory.user_id = 2; // Изменить на текующий!
+    this.newHistory.userId = 2; // Изменить на текующий!
     this.historyService.nextStatus(this.newHistory).subscribe();
   }
 
