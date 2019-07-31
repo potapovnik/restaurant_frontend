@@ -3,10 +3,10 @@ import {Dish} from '../utils/dish';
 import {DishService} from './dish.service';
 import {Ingredient, IngredientApi} from '../utils/Ingredient';
 import {IngredientService} from '../ingredients/ingredient.service';
-import {DishConsist, EmbeddedId} from '../utils/dishconsist';
+import {DishConsist} from '../utils/dishconsist';
 import {MatPaginator, MatSort} from '@angular/material';
 import {BehaviorSubject, merge, of as observableOf} from 'rxjs';
-import {catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap} from 'rxjs/operators';
+import {catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap, tap} from 'rxjs/operators';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
@@ -28,19 +28,19 @@ export class DishesComponent implements AfterViewInit {
   TYPE = 'type';
   COST = 'cost';
   ISMENU = 'ismenu';
-  dishes: Dish[];
-  ingredients: Ingredient[];
+  dishes: Dish[] = [];
+  ingredients: Ingredient[] = [];
   filter$: BehaviorSubject<string> = new BehaviorSubject<string>('');
   filter = '';
-  newConsist: DishConsist = new DishConsist();
+  newConsist: DishConsist = {id: {dishId: 0, ingredientId: 0}, ingredient: new Ingredient(), value: 0};
   columnsToDisplay = ['id', 'name', 'type', 'cost', 'ismenu', 'consist'];
   resultsLength = 0;
-  expandedElement: Dish | null;
+  expandedElement?: Dish | null;
   _newDishForm: FormGroup;
   _editDishForm: FormGroup;
 
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: false}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
+  @ViewChild(MatSort, {static: false}) sort!: MatSort;
 
   constructor(private dishesService: DishService, private ingredientService: IngredientService, private fb: FormBuilder) {
     this._newDishForm = fb.group({
@@ -101,8 +101,6 @@ export class DishesComponent implements AfterViewInit {
       ).subscribe((data: Dish[]) => {
       this.dishes = data;
     });
-    this.newConsist.id = new EmbeddedId();
-
   }
 
   applyFilter(value: string) {
@@ -133,7 +131,7 @@ export class DishesComponent implements AfterViewInit {
   }
 
   createDish() {
-    this.dishesService.createDish(this._editDishForm.value as Dish).pipe(
+    this.dishesService.createDish(this._newDishForm.value as {name: string, type: string, cost: number, ismenu: boolean}).pipe(
       switchMap(() => {
         return this.dishesService
           .getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter);
@@ -169,10 +167,9 @@ export class DishesComponent implements AfterViewInit {
     });
   }
 
-  createDishConsist(newCon: DishConsist, dishId: number) {
-    newCon.id.dishId = dishId;
-    newCon.value = newCon.value > 0 ? newCon.value : 0;
-    this.dishesService.createDishConsist(newCon).pipe(
+  createDishConsist(newCon: DishConsist, _dishId: number) {
+    this.dishesService.createDishConsist(
+      {value:  newCon.value > 0 ? newCon.value : 0, id: {ingredientId: newCon.id.ingredientId, dishId: _dishId}}).pipe(
       switchMap(() => {
         return this.dishesService
           .getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter);

@@ -1,4 +1,4 @@
-export class Missingingredient {
+export interface Missingingredient {
   id: number;
   name: string;
   measure: string;

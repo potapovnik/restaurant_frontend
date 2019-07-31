@@ -21,13 +21,13 @@ import {Ingredient} from '../utils/Ingredient';
   ],
 })
 export class IngredientsReadOnlyComponent implements AfterViewInit {
-  ingredients: Ingredient[];
+  ingredients: Ingredient[] = [];
   columnsToDisplay = ['id', 'name', 'measure', 'summaryAmount'];
   resultsLength = 0;
-  expandedElement: Ingredient | null;
+  expandedElement?: Ingredient | null;
 
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: false}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
+  @ViewChild(MatSort, {static: false}) sort!: MatSort;
 
   constructor(private ingredientService: IngredientService) {
   }

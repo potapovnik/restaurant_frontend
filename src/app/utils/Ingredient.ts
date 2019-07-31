@@ -1,13 +1,13 @@
 import {IngredientPart} from './ingredientpart';
 
 export class Ingredient {
-  id: number;
-  name: string;
-  measure: string;
-  volumePerUnit: number;
-  summaryAmount: number;
-  summaryVolume: number;
-  parts: IngredientPart[];
+  id = 0;
+  name?: string;
+  measure?: string;
+  volumePerUnit = 0;
+  summaryAmount?: number;
+  summaryVolume?: number;
+  parts: IngredientPart[] = [];
 }
 
 export interface IngredientApi {

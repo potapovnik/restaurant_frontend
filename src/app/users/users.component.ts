@@ -9,20 +9,21 @@ import {Role} from '../utils/role';
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
-  chosedUser: Users;
-  createdUser: Users;
-  allUsers: Users[];
-  allRoles: Role[];
+  chosedUser: Users = new Users(0, '', '', '', '', 0);
+  createdUser: Users = new Users(0, '', '', '', '', 0);
+  allUsers: Users[] = [];
+  allRoles: Role[] = [];
   isChosed: boolean;
 
   constructor(private userService: UsersService) {
+    this.isChosed = false;
   }
 
 
   ngOnInit() {
     this.isChosed = false;
-    this.chosedUser = new Users();
-    this.createdUser = new Users();
+    // this.chosedUser = new Users();
+    // this.createdUser = new Users();
     this.getAllUsers();
     this.getAllRoles();
   }
@@ -50,11 +51,13 @@ export class UsersComponent implements OnInit {
   }
 
   createUser(user: Users) {
-    return this.userService.create(user).subscribe();
+    return this.userService.create(
+      {login: user.login, password: user.password, name: user.name, surname: user.surname, roleId: user.roleId}).subscribe();
   }
 
   cancel() {
-    this.createdUser = new Users();
+    // this.createdUser = new Users();
+    this.createdUser = {id: 0, login: '', name: '', password: '', roleId: 0, surname: ''};
   }
 
   getAllRoles() {

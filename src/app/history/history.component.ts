@@ -11,8 +11,8 @@ import {Statistic} from '../utils/statistic';
 export class HistoryComponent implements OnInit {
   _statisticForm: FormGroup;
   statistic: Statistic = new Statistic();
-  usedIngredients: Map<string, number>;
-  soldDishes: Map<string, number>;
+  usedIngredients: Map<string, number> = new Map<string, number>();
+  soldDishes: Map<string, number> = new Map<string, number>();
 
   constructor(private fb: FormBuilder, private historyService: HistoryService) {
     this._statisticForm = fb.group({
@@ -22,10 +22,6 @@ export class HistoryComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.statistic.soldDishes = [];
-    this.statistic.usedIngredients = [];
-    this.usedIngredients = new Map<string, number>();
-    this.soldDishes = new Map<string, number>();
   }
 
   getStatistic() {

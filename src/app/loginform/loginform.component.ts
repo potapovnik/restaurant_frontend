@@ -41,15 +41,15 @@ export class LoginformComponent implements OnInit {
   handleLoginClick() {
     this.isLoadingResults = true;
     this.currentUserService.authenticate(
-      (this._loginForm.value as {login: string, password: string}).login,
-      (this._loginForm.value as {login: string, password: string}).password
+      (this._loginForm.value as { login: string, password: string }).login,
+      (this._loginForm.value as { login: string, password: string }).password
     ).pipe(
       catchError(() => {
 
-        return observableOf({});
+        return observableOf({accessToken: 'undefined', refreshToken: 'undefined', roleId: 0, username: 'undefined'} );
       })
-    ).subscribe((response: UserAuthInfo) => {
-      if (response.accessToken == undefined) {
+    ).subscribe((value: UserAuthInfo) => {
+      if (value.accessToken === 'undefined') {
         this.isLoadingResults = false;
         this._loginForm.setValue({password: ''});
       } else {

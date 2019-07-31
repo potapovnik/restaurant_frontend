@@ -54,7 +54,7 @@ export class IngredientService {
       {headers: this.myHeaders});
   }
 
-  createIngredient(ing: Ingredient): Observable<{}> {
+  createIngredient(ing: {name: string, measure: string, volumePerUnit: number}): Observable<{}> {
     return this.http.post(this.ingredientsPath, JSON.stringify(ing), {headers: this.myHeaders});
   }
 

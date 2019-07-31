@@ -1,12 +1,12 @@
 import {Ingredient} from './Ingredient';
 
-export class DishConsist {
+export interface DishConsist {
   id: EmbeddedId;
   value: number;
   ingredient: Ingredient;
 }
 
-export class EmbeddedId {
+export interface EmbeddedId {
   dishId: number;
   ingredientId: number;
 }

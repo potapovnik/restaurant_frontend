@@ -2,7 +2,7 @@ import {APP_INITIALIZER, Injectable, Provider} from '@angular/core';
 import {Observable, ReplaySubject, throwError} from 'rxjs';
 import {filter, first, map, shareReplay, skip, switchMap, tap} from 'rxjs/operators';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import * as jwt_decode from 'jwt-decode';
+
 
 interface RawAuthInfo {
   authToken: string;
@@ -46,8 +46,7 @@ export class CurrentUserService {
         if (auth == undefined) {
           return undefined;
         }
-        // tslint:disable-next-line:no-unsafe-any
-        const accessToken = jwt_decode(auth.authToken) as DecodedAccessToken;
+        const accessToken = this.parseJwt(auth.authToken);
         // const accessToken = jwt_decode(auth.access_token) as DecodedAccessToken;
         return {
           username: accessToken.sub,
@@ -121,6 +120,16 @@ export class CurrentUserService {
           }));
       })
     );
+  }
+
+  parseJwt(token: string): DecodedAccessToken {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload) as DecodedAccessToken;
   }
 }
 

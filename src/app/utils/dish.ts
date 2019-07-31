@@ -1,13 +1,13 @@
 import {DishConsist} from './DishConsist';
 
 export class Dish {
-  id: number;
-  name: string;
-  ismenu: boolean;
-  cost: number;
-  type: string;
-  consist: DishConsist[];
-  maxCount: number;
+  id = 0;
+  name = '';
+  ismenu = true;
+  cost = 0;
+  type = '';
+  consist: DishConsist[] = [];
+  maxCount = 0;
 }
 
 // export class DishForDb {

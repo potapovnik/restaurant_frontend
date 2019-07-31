@@ -38,7 +38,7 @@ export class UsersService {
     return this.http.put<Users>(this.users, JSON.stringify(user), {headers: this.head});
   }
 
-  create(user: Users): Observable<Users> {
+  create(user: {login: string, password: string, name: string, surname: string, roleId: number}): Observable<Users> {
     console.log(this.users + '- create');
     return this.http.post<Users>(this.users, JSON.stringify(user), {headers: this.head});
   }

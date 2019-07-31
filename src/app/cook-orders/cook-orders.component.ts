@@ -12,21 +12,19 @@ import {OrdersForHistory} from '../utils/orders.for.history';
   styleUrls: ['./cook-orders.component.scss']
 })
 export class CookOrdersComponent implements OnInit {
-  listOfMyOrders: Orders[];
-  newHistory: History;
-  isTakeCook: string;
-  isTakeWaiter: string;
-  isGivenCook: string;
-  isGivenWaiter: string;
-  selectedOrder: Orders;
+  listOfMyOrders: Orders[] = [];
+  newHistory: History = new History();
+  isTakeCook?: string;
+  isTakeWaiter?: string;
+  isGivenCook?: string;
+  isGivenWaiter?: string;
+  selectedOrder: Orders = new Orders();
 
   constructor(private userService: UsersService, private orderService: OrdersService, private  historyService: HistoryService) {
   }
 
   ngOnInit() {
     this.getAllOrderOfCook();
-    this.selectedOrder = new Orders();
-
   }
 
   getAllOrderOfCook() {
@@ -34,8 +32,8 @@ export class CookOrdersComponent implements OnInit {
   }
 
   updateOrder(order: Orders, status: number) {
-    this.newHistory = new History();
-    this.newHistory.order = new OrdersForHistory();
+    // this.newHistory = new History();
+    // this.newHistory.order = new OrdersForHistory();
     this.newHistory.userId = 2; // Изменить на текущий!
     this.newHistory.order.id = order.id;
     this.newHistory.statusId = status;
