@@ -44,25 +44,33 @@
               </button>
             </td>
           </tr>
-          <tr>
-            <td>
-              <mat-select placeholder="Ингредиент" [(ngModel)]="newConsist.id.ingredientId"
-                          (click)="$event.stopPropagation()">
-                <mat-option *ngFor="let item of ingredients" [value]="item.id" (click)="$event.stopPropagation()">
-                  {{item.name}}
-                </mat-option>
-              </mat-select>
-            </td>
-            <td>
-              <input matInput type="number" placeholder="Кол-во" [(ngModel)]="newConsist.value"
-                     (click)="$event.stopPropagation()">
-            </td>
-            <td>
-              <button mat-stroked-button (click)="$event.stopPropagation(); createDishConsist(newConsist, dish.id)">
-                Добавить ингредиент
-              </button>
-            </td>
-          </tr>
+          <ng-container [formGroup]="_newConsist">
+            <tr>
+              <td>
+                <mat-form-field>
+                  <mat-select placeholder="Ингредиент" formControlName="ingredientId"
+                              (click)="$event.stopPropagation()">
+                    <mat-option *ngFor="let item of ingredients" [value]="item.id" (click)="$event.stopPropagation()">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                  <!--    <mat-error *appControlErrors="let error of 'name'">{{error}}</mat-error>-->
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field>
+                  <mat-label>Количество</mat-label>
+                <input matInput type="number" placeholder="Кол-во" formControlName="value"
+                       (click)="$event.stopPropagation()">
+                </mat-form-field>
+              </td>
+              <td>
+                <button [disabled]="_newConsist.invalid" mat-stroked-button (click)="$event.stopPropagation(); createDishConsist(dish.id)">
+                  Добавить ингредиент
+                </button>
+              </td>
+            </tr>
+          </ng-container>
         </table>
       </td>
     </ng-container>

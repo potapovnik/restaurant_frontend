@@ -36,6 +36,7 @@ export class DishesComponent implements AfterViewInit {
   columnsToDisplay = ['id', 'name', 'type', 'cost', 'ismenu', 'consist'];
   resultsLength = 0;
   expandedElement?: Dish | null;
+  _newConsist: FormGroup;
   _newDishForm: FormGroup;
   _editDishForm: FormGroup;
 
@@ -55,6 +56,10 @@ export class DishesComponent implements AfterViewInit {
       type: fb.control(undefined, [Validators.required]),
       cost: fb.control(undefined, [Validators.min(0.01), Validators.required]),
       ismenu: fb.control(undefined, [Validators.required])
+    });
+    this._newConsist = fb.group({
+      ingredientId: fb.control( undefined, [Validators.required]),
+      value: fb.control( undefined, [Validators.min(0.000001), Validators.required]),
     });
   }
 
@@ -167,9 +172,10 @@ export class DishesComponent implements AfterViewInit {
     });
   }
 
-  createDishConsist(newCon: DishConsist, _dishId: number) {
+  createDishConsist(_dishId: number) {
     this.dishesService.createDishConsist(
-      {value:  newCon.value > 0 ? newCon.value : 0, id: {ingredientId: newCon.id.ingredientId, dishId: _dishId}}).pipe(
+      {value:  this._newConsist.value.value as number, id:
+          {ingredientId: this._newConsist.value.ingredientId as number, dishId: _dishId}}).pipe(
       switchMap(() => {
         return this.dishesService
           .getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter);

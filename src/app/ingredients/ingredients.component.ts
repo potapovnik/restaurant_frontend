@@ -117,6 +117,7 @@ export class IngredientsComponent implements AfterViewInit {
       data.forEach((a: Ingredient) => {
         let sum = 0;
         for (const part of a.parts) {
+          // tslint:disable-next-line:no-unsafe-any
           sum += part.value;
         }
         a.summaryAmount = sum;
@@ -148,6 +149,7 @@ export class IngredientsComponent implements AfterViewInit {
       data.forEach((a: Ingredient) => {
         let sum = 0;
         for (const part of a.parts) {
+          // tslint:disable-next-line:no-unsafe-any
           sum += part.value;
         }
         a.summaryAmount = sum;
@@ -184,6 +186,7 @@ export class IngredientsComponent implements AfterViewInit {
             data.forEach((a: Ingredient) => {
               let sum = 0;
               for (const part of a.parts) {
+                // tslint:disable-next-line:no-unsafe-any
                 sum += part.value;
               }
               a.summaryAmount = sum;
