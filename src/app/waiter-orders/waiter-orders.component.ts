@@ -71,6 +71,7 @@ export class WaiterOrdersComponent implements OnInit {
   usedIngredientsInCurrentOrder(dish: Dish): number {
     const tempIngredients = [];
     for (let i = 0; i < dish.consist.length; i++) {
+      // tslint:disable-next-line:strict-type-predicates
       tempIngredients[i] = Math.ceil(typeof this.reservedIngredients[dish.consist[i].ingredient.id] === 'undefined' ?
         0 : this.reservedIngredients[dish.consist[i].ingredient.id] / dish.consist[i].value);
     }
@@ -122,6 +123,7 @@ export class WaiterOrdersComponent implements OnInit {
     // резервируем ингредиенты по количеству блюд
     for (const oneDishIngredient of  dishAdd.consist) {
       this.reservedIngredients[oneDishIngredient.ingredient.id] =
+        // tslint:disable-next-line:strict-type-predicates
         typeof this.reservedIngredients[oneDishIngredient.ingredient.id] === 'undefined' ?
           oneDishIngredient.value * _deltaCount :
           this.reservedIngredients[oneDishIngredient.ingredient.id] + oneDishIngredient.value * _deltaCount;
