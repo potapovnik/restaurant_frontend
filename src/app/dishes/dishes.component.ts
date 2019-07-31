@@ -174,8 +174,8 @@ export class DishesComponent implements AfterViewInit {
 
   createDishConsist(_dishId: number) {
     this.dishesService.createDishConsist(
-      {value:  this._newConsist.value.value as number, id:
-          {ingredientId: this._newConsist.value.ingredientId as number, dishId: _dishId}}).pipe(
+      {value:  (this._newConsist.value as {value: number, ingredientId: number}).value, id:
+          {ingredientId: (this._newConsist.value as {value: number, ingredientId: number}).ingredientId, dishId: _dishId}}).pipe(
       switchMap(() => {
         return this.dishesService
           .getAllDishes(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter);

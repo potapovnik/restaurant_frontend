@@ -90,6 +90,7 @@ export class IngredientsComponent implements AfterViewInit {
       data.forEach((a: Ingredient) => {
         let sum = 0;
         for (const part of a.parts) {
+          // tslint:disable-next-line:no-unsafe-any
           sum += part.value;
         }
         a.summaryAmount = sum;
@@ -101,7 +102,7 @@ export class IngredientsComponent implements AfterViewInit {
 
 
   createIng() {
-    this.ingredientService.createIngredient(this._newIngredientForm.value as {name: string, measure: string, volumePerUnit: number}).pipe(
+    this.ingredientService.createIngredient(this._newIngredientForm.value as { name: string, measure: string, volumePerUnit: number }).pipe(
       switchMap(() => {
         return this.ingredientService
           .getAllIngredients(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
@@ -209,6 +210,7 @@ export class IngredientsComponent implements AfterViewInit {
         this.storageService.refreshUsedStorage$.next(true);
       });
       let sum = 0;
+      // tslint:disable-next-line:no-unsafe-any
       for (const partOfIngredient of this.ingredients[this.ingredients.indexOf(ingr)].parts) {
         sum += partOfIngredient.value;
       }
