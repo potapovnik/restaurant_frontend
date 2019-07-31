@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Dish, DishApi} from '../utils/dish';
-import {DishConsist} from '../utils/dishconsist';
+
 
 
 @Injectable({

@@ -1,9 +1,9 @@
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {Dish} from '../utils/dish';
+import {DishConsist} from '../utils/DishConsist';
 import {DishService} from './dish.service';
 import {Ingredient, IngredientApi} from '../utils/Ingredient';
 import {IngredientService} from '../ingredients/ingredient.service';
-import {DishConsist} from '../utils/dishconsist';
 import {MatPaginator, MatSort} from '@angular/material';
 import {BehaviorSubject, merge, of as observableOf} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap, tap} from 'rxjs/operators';

@@ -1,4 +1,5 @@
-import {IngredientPart} from './ingredientpart';
+import {IngredientPart} from './IngredientPart';
+
 
 export class Ingredient {
   id = 0;
