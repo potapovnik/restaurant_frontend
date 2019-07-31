@@ -46,7 +46,7 @@ export class LoginformComponent implements OnInit {
     ).pipe(
       catchError(() => {
 
-        return observableOf({accessToken: 'undefined', refreshToken: 'undefined', roleId: 0, username: 'undefined'} );
+        return observableOf({accessToken: 'undefined', refreshToken: 'undefined', roleId: 0, username: 'undefined', id: 0});
       })
     ).subscribe((value: UserAuthInfo) => {
       if (value.accessToken === 'undefined') {

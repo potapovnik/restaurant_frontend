@@ -12,6 +12,8 @@ import {Dish} from '../utils/dish';
 import {IngredientService} from '../ingredients/ingredient.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {OrdersForHistory} from '../utils/orders.for.history';
+import {CurrentUserService, UserAuthInfo} from '../auth/currentuser.service';
+import {async} from 'rxjs/internal/scheduler/async';
 
 @Component({
   selector: 'app-waiter-orders',
@@ -39,10 +41,13 @@ export class WaiterOrdersComponent implements OnInit {
   isTakeCurrentOrderButton = false;
   reservedIngredients: number[] = [];
   _dishCountForm: FormGroup;
+  currentUserId = 0;
+  public auth$ = this.currentUserService.auth$;
 
 
   constructor(private userService: UsersService, private orderService: OrdersService, private dishService: DishService,
-              private historyService: HistoryService, private ingredientService: IngredientService, private fb: FormBuilder) {
+              private historyService: HistoryService, private ingredientService: IngredientService, private fb: FormBuilder,
+              private currentUserService: CurrentUserService) {
     this._dishCountForm = fb.group({
       count: fb.control(0, [Validators.required])
     });
@@ -61,6 +66,11 @@ export class WaiterOrdersComponent implements OnInit {
     // this.createdOrder = new Orders();
     this.orderDishList = [];
     this.nameCountDishList = [];
+    this.auth$.subscribe((value: UserAuthInfo | undefined | null) => {
+      if (value !== undefined && value !== null) {
+        this.currentUserId = value.id;
+      }
+    });
   }
 
   onSelectedDish(selectedDish: Dish) {
@@ -159,7 +169,7 @@ export class WaiterOrdersComponent implements OnInit {
   }
 
   createOrder() {
-    this.orderService.createOrder({comments: this.newOrder.comments,}).subscribe((res: Orders) => {
+    this.orderService.createOrder({comments: this.newOrder.comments}).subscribe((res: Orders) => {
       this.createdOrder = res;
       this.newOrder.id = res.id;
       this.newOrder.consist.forEach((x: OrderDish) => x.id.orderId = res.id);
