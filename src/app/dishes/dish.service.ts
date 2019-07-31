@@ -34,7 +34,7 @@ export class DishService {
     return this.http.get<Dish[]>(this.dishesPath + '/inmenu', {headers: myHeaders});
   }
 
-  createDish(dish: Dish): Observable<{}> {
+  createDish(dish: {name: string, type: string, cost: number, ismenu: boolean}): Observable<{}> {
     const myHeaders = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.post(this.dishesPath, JSON.stringify(dish), {headers: myHeaders});
   }
@@ -44,7 +44,7 @@ export class DishService {
     return this.http.delete(this.dishIngredientPath + '/' + String(dishId) + '/' + String(ingId), {headers: myHeaders});
   }
 
-  createDishConsist(newCons: DishConsist): Observable<{}> {
+  createDishConsist(newCons: {value: number, id: {ingredientId: number, dishId: number}}): Observable<{}> {
     const myHeaders = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.post(this.dishIngredientPath, JSON.stringify(newCons), {headers: myHeaders});
   }

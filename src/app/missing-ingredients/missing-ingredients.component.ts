@@ -13,7 +13,7 @@ import {switchMap} from 'rxjs/operators';
 export class MissingIngredientsComponent implements AfterViewInit {
 
   columnsToDisplay = ['id', 'name', 'measure', 'amount', 'needAmount'];
-  missingIngredients: Missingingredient[];
+  missingIngredients: Missingingredient[] = [];
 
   constructor(private ingredientService: IngredientService) {
   }

@@ -13,14 +13,18 @@ export class AllOrdersComponent implements OnInit {
   isTakeWaiter: string;
   isGivenCook: string;
   isGivenWaiter: string;
-  selectedOrder: Orders;
+  selectedOrder!: Orders;
 
   constructor(private ordersService: OrdersService) {
+    this.listOfAllOrders = [];
+    this.isTakeCook = '';
+    this.isTakeWaiter = '';
+    this.isGivenCook = '';
+    this.isGivenWaiter = '';
   }
 
   ngOnInit() {
     this.getAllOrders();
-    this.selectedOrder = new Orders();
   }
 
   getAllOrders() {

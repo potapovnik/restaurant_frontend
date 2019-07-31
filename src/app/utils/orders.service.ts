@@ -14,7 +14,7 @@ export class OrdersService {
   }
 
 
-  createOrder(order: Orders): Observable<Orders> {
+  createOrder(order: {comments: string}): Observable<Orders> {
     const url = this.orders;
     console.log(url + '- post order');
     return this.http.post<Orders>(url, JSON.stringify(order), {headers: this.head});

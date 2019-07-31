@@ -1,4 +1,4 @@
-export class IngredientPart {
+export interface IngredientPart {
   id: number;
   value: number;
   expirationDate: string;

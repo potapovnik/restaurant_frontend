@@ -1,12 +1,12 @@
 import {Dish} from './dish';
 
-export class OrderDish {
+export interface OrderDish {
   id: OrderDishId;
   count: number;
   dish: Dish;
 }
 
-export class OrderDishId {
+export interface OrderDishId {
   dishId: number;
   orderId: number;
 }

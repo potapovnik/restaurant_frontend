@@ -1,17 +1,19 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "strict": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
-    "module": "es2015",
+    "module": "esnext",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es5",
+    "target": "es2015",
+    "importHelpers": true,
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -19,5 +21,9 @@
       "es2018",
       "dom"
     ]
+  },
+  "angularCompilerOptions": {
+    "strictMetadataEmit": true,
+    "fullTemplateTypeCheck": true
   }
 }

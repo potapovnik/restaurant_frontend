@@ -1,6 +1,6 @@
 export class Statistic {
-  revenue: number;
-  usedIngredients: [];
-  soldDishes: [];
+  revenue?: number;
+  usedIngredients: [] = [];
+  soldDishes: [] = [];
 }
 

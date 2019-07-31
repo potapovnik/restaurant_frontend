@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
-import {Ingredient} from '../utils/Ingredient';
+import {Ingredient, IngredientApi} from '../utils/Ingredient';
 import {IngredientService} from './ingredient.service';
 import {IngredientPart} from '../utils/IngredientPart';
 import {MatPaginator} from '@angular/material/paginator';
@@ -26,17 +26,17 @@ import {validatorIngredientUniqueName} from './validatorIngredientUniqueName';
 })
 export class IngredientsComponent implements AfterViewInit {
   VALUE = 'value';
-  ingredients: Ingredient[];
+  ingredients: Ingredient[] = [];
   columnsToDisplay = ['id', 'name', 'measure', 'summaryAmount', 'volumePerUnit', 'summaryVolume', 'delete'];
   newIngredient: Ingredient = new Ingredient();
   resultsLength = 0;
-  expandedElement: Ingredient | null;
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: false}) sort: MatSort;
+  expandedElement!: Ingredient | null;
+  @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
+  @ViewChild(MatSort, {static: false}) sort!: MatSort;
   _newIngredientForm: FormGroup;
   _newIngredientPartForm: FormGroup;
-  freeStorageVolume: number;
-  maxStorageVolume: number;
+  freeStorageVolume = 0;
+  maxStorageVolume = 0;
 
   constructor(private ingredientService: IngredientService, private storageService: StorageService, private fb: FormBuilder) {
     this._newIngredientForm = fb.group({
@@ -101,7 +101,7 @@ export class IngredientsComponent implements AfterViewInit {
 
 
   createIng() {
-    this.ingredientService.createIngredient(this._newIngredientForm.value as Ingredient).pipe(
+    this.ingredientService.createIngredient(this._newIngredientForm.value as {name: string, measure: string, volumePerUnit: number}).pipe(
       switchMap(() => {
         return this.ingredientService
           .getAllIngredients(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
@@ -173,7 +173,7 @@ export class IngredientsComponent implements AfterViewInit {
               return this.ingredientService
                 .getAllIngredients(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
             }),
-            map(data => {
+            map((data: IngredientApi) => {
               this.resultsLength = data.totalCount;
               return data.items;
             }),

@@ -19,24 +19,24 @@ import {OrdersForHistory} from '../utils/orders.for.history';
   styleUrls: ['./waiter-orders.component.scss']
 })
 export class WaiterOrdersComponent implements OnInit {
-  newOrder: Orders;
-  cookList: Users[];
-  dishList: Dish[];
-  selectedDish: Dish;
-  nameCountDishList: DishView[];
-  countOfDishInOrder: number;
-  myOrders: Orders[];
-  choosedCook: Users;
-  orderDishList: OrderDish[];
-  createdOrder: Orders;
-  newHistory: History;
+  newOrder: Orders = new Orders();
+  cookList: Users[] = [];
+  dishList: Dish[] = [];
+  selectedDish: Dish = new Dish();
+  nameCountDishList: DishView[] = [];
+  // countOfDishInOrder: number;
+  myOrders: Orders[] = [];
+  choosedCook: Users = new Users(0, '', '' , '', '', 0);
+  orderDishList: OrderDish[] = [];
+  createdOrder: Orders = new Orders();
+  newHistory: History = new History();
   isChosed: boolean;
-  choosedOrder: Orders;
-  selectedOrder: Orders;
-  isTakeCook: string;
-  isTakeWaiter: string;
-  isGivenCook: string;
-  isGivenWaiter: string;
+  // choosedOrder: Orders;
+  selectedOrder: Orders = new Orders();
+  isTakeCook = '';
+  isTakeWaiter = '';
+  isGivenCook = '';
+  isGivenWaiter = '';
   reservedIngredients: number[] = [];
   _dishCountForm: FormGroup;
 
@@ -45,6 +45,7 @@ export class WaiterOrdersComponent implements OnInit {
     this._dishCountForm = fb.group({
       count: fb.control(0, [Validators.required])
     });
+    this.isChosed = false;
   }
 
   ngOnInit() {
@@ -52,11 +53,11 @@ export class WaiterOrdersComponent implements OnInit {
     this.userService.getAllCook().subscribe(resp => this.cookList = resp);
     this.dishService.getMenuDishes().subscribe(resp => this.dishList = resp);
     this.orderService.getAllById(2).subscribe(resp => this.myOrders = resp); // Заменить на текущего!
-    this.newOrder = new Orders();
+    // this.newOrder = new Orders();
     this.newOrder.consist = [];
-    this.selectedDish = new Dish();
-    this.choosedCook = new Users();
-    this.createdOrder = new Orders();
+    // this.selectedDish = new Dish();
+    // this.choosedCook = new Users();
+    // this.createdOrder = new Orders();
     this.orderDishList = [];
     this.nameCountDishList = [];
   }
@@ -70,7 +71,7 @@ export class WaiterOrdersComponent implements OnInit {
   usedIngredientsInCurrentOrder(dish: Dish): number {
     const tempIngredients = [];
     for (let i = 0; i < dish.consist.length; i++) {
-      tempIngredients[i] = Math.ceil(this.reservedIngredients[dish.consist[i].ingredient.id] === undefined ?
+      tempIngredients[i] = Math.ceil(typeof this.reservedIngredients[dish.consist[i].ingredient.id] === 'undefined' ?
         0 : this.reservedIngredients[dish.consist[i].ingredient.id] / dish.consist[i].value);
     }
     let result = Math.max(...tempIngredients);
@@ -83,7 +84,7 @@ export class WaiterOrdersComponent implements OnInit {
   cancelOrder() {
     this.orderDishList = [];
     this.reservedIngredients = [];
-    this.newOrder = new Orders();
+    // this.newOrder = new Orders();
     this.newOrder.consist = [];
     this.nameCountDishList = [];
   }
@@ -117,11 +118,11 @@ export class WaiterOrdersComponent implements OnInit {
       }
     }
     // знаем что таких блюд не было
-    this.newOrder.consist.push({id: {dishId: dishAdd.id, orderId: null}, dish: dishAdd, count: _deltaCount});
+    this.newOrder.consist.push({id: {dishId: dishAdd.id, orderId: 0}, dish: dishAdd, count: _deltaCount});
     // резервируем ингредиенты по количеству блюд
     for (const oneDishIngredient of  dishAdd.consist) {
       this.reservedIngredients[oneDishIngredient.ingredient.id] =
-        this.reservedIngredients[oneDishIngredient.ingredient.id] === undefined ?
+        typeof this.reservedIngredients[oneDishIngredient.ingredient.id] === 'undefined' ?
           oneDishIngredient.value * _deltaCount :
           this.reservedIngredients[oneDishIngredient.ingredient.id] + oneDishIngredient.value * _deltaCount;
     }
@@ -156,12 +157,10 @@ export class WaiterOrdersComponent implements OnInit {
   }
 
   createOrder() {
-    const tempOrder = new Orders();
-    tempOrder.comments = this.newOrder.comments;
-    this.orderService.createOrder(tempOrder).subscribe((res: Orders) => {
+    this.orderService.createOrder({comments: this.newOrder.comments, }).subscribe((res: Orders) => {
       this.createdOrder = res;
       this.newOrder.id = res.id;
-      this.newOrder.consist.forEach((x) => x.id.orderId = res.id);
+      this.newOrder.consist.forEach((x: OrderDish) => x.id.orderId = res.id);
       this.orderService.updateOrder(this.newOrder).subscribe(
         () => {
           this.ingredientService.debitIngredients(this.newOrder.consist).subscribe(
