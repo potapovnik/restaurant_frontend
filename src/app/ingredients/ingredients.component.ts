@@ -10,6 +10,8 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import {StorageService} from '../storage/storage.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {validatorIngredientUniqueName} from './validatorIngredientUniqueName';
+import {MatDialog} from '@angular/material';
+import {DeleteDialogComponent} from '../dialog/delete.dialog';
 
 
 @Component({
@@ -38,7 +40,8 @@ export class IngredientsComponent implements AfterViewInit {
   freeStorageVolume = 0;
   maxStorageVolume = 0;
 
-  constructor(private ingredientService: IngredientService, private storageService: StorageService, private fb: FormBuilder) {
+  constructor(private ingredientService: IngredientService, private storageService: StorageService,
+              private fb: FormBuilder, private dialog: MatDialog) {
     this._newIngredientForm = fb.group({
       name: fb.control(undefined, [Validators.required], [validatorIngredientUniqueName(this.ingredientService)]),
       measure: fb.control(undefined, [Validators.required]),
@@ -203,6 +206,7 @@ export class IngredientsComponent implements AfterViewInit {
   }
 
   deleteIngPart(ingr: Ingredient, part: IngredientPart) {
+    this.openDialog();
     if (confirm('Вы точно хотите удалить партию с Id = ' + part.id + '?')) {
       ingr.parts.splice(ingr.parts.indexOf(part), 1);
       this.ingredientService.deleteIngredientPart(part.id).subscribe(() => {
@@ -226,4 +230,14 @@ export class IngredientsComponent implements AfterViewInit {
         '';
   }
 
+  openDialog(): void {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      width: '250px',
+      data: {subject: 'id'}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+    });
+  }
 }
