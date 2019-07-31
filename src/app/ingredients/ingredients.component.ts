@@ -212,6 +212,7 @@ export class IngredientsComponent implements AfterViewInit {
       let sum = 0;
       // tslint:disable-next-line:no-unsafe-any
       for (const partOfIngredient of this.ingredients[this.ingredients.indexOf(ingr)].parts) {
+        // tslint:disable-next-line:no-unsafe-any
         sum += partOfIngredient.value;
       }
       this.ingredients[this.ingredients.indexOf(ingr)].summaryAmount = sum;
