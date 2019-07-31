@@ -14,6 +14,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {OrdersForHistory} from '../utils/orders.for.history';
 import {CurrentUserService, UserAuthInfo} from '../auth/currentuser.service';
 import {async} from 'rxjs/internal/scheduler/async';
+
 @Component({
   selector: 'app-waiter-orders',
   templateUrl: './waiter-orders.component.html',
@@ -162,9 +163,9 @@ export class WaiterOrdersComponent implements OnInit {
           this.newHistory.order = new OrdersForHistory();
           this.newHistory.order.id = this.createdOrder.id;
           this.newHistory.statusId = 2;
-          this.newHistory.userId = 3;// изменить на текущий
+          this.newHistory.userId = this.currentUserId; // изменить на текущий
           this.historyService.nextStatus(this.newHistory).subscribe(() =>
-            this.orderService.getAllById(3).subscribe(resp => this.myOrders = resp));// ИЗменить на текущий
+            this.orderService.getAllById(this.currentUserId).subscribe(resp => this.myOrders = resp)); // ИЗменить на текущий
         }
       );
     });
@@ -177,7 +178,7 @@ export class WaiterOrdersComponent implements OnInit {
     this.newHistory.statusId = 5;
     this.newHistory.userId = this.currentUserId; // Изменить на текующий!
     this.historyService.nextStatus(this.newHistory).subscribe(() =>
-      this.orderService.getAllById(this.currentUserId).subscribe(resp => this.myOrders = resp));// ИЗменить на текущий
+      this.orderService.getAllById(this.currentUserId).subscribe(resp => this.myOrders = resp)); // ИЗменить на текущий
   }
 
   takeOrder(order: Orders) {
@@ -187,7 +188,7 @@ export class WaiterOrdersComponent implements OnInit {
     this.newHistory.statusId = 1;
     this.newHistory.userId = this.currentUserId; // Изменить на текующий!
     this.historyService.nextStatus(this.newHistory).subscribe(() =>
-      this.orderService.getAllById(this.currentUserId).subscribe(resp => this.myOrders = resp));// ИЗменить на текущий
+      this.orderService.getAllById(this.currentUserId).subscribe(resp => this.myOrders = resp)); // ИЗменить на текущий
   }
 
   selectMyOrder(order: Orders) {

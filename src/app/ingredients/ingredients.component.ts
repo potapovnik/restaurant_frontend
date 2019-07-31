@@ -12,6 +12,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {validatorIngredientUniqueName} from './validatorIngredientUniqueName';
 import {MatDialog} from '@angular/material';
 import {DeleteDialogComponent} from '../dialog/delete.dialog';
+import {AlertDialogComponent} from '../dialog/alert.dialog';
 
 
 @Component({
@@ -166,78 +167,83 @@ export class IngredientsComponent implements AfterViewInit {
 
   }
 
-  deleteIngredient(ingredient: Ingredient) {
-    this.ingredientService.isUsedIngredientInDish(ingredient.id).subscribe((isUsed: boolean) => {
-      if (isUsed) {
-        alert('Нельзя удалить ингредиент ' + ingredient.name + ', он используется в блюде.');
-      } else {
-        if (confirm('Вы точно хотите удалить ингредиент ' + ingredient.name + ' и все его партии?')) {
-          this.ingredientService.deleteIngredient(ingredient.id).pipe(catchError(() => {
-            return observableOf([]);
-          })).pipe(
-            switchMap(() => {
-              return this.ingredientService
-                .getAllIngredients(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
-            }),
-            map((data: IngredientApi) => {
-              this.resultsLength = data.totalCount;
-              return data.items;
-            }),
-            catchError(() => {
-              return observableOf([]);
-            })
-          ).subscribe((data: Ingredient[]) => {
-            data.forEach((a: Ingredient) => {
-              let sum = 0;
-              for (const part of a.parts) {
-                // tslint:disable-next-line:no-unsafe-any
-                sum += part.value;
-              }
-              a.summaryAmount = sum;
-              a.summaryVolume = sum * a.volumePerUnit;
-            });
-            this.ingredients = data;
-            this.storageService.refreshUsedStorage$.next(true);
-            this.ingredientService.refreshMissingIngredients$.next(true);
-          });
-        }
-      }
-    });
-  }
-
-  deleteIngPart(ingr: Ingredient, part: IngredientPart) {
-    this.openDialog();
-    if (confirm('Вы точно хотите удалить партию с Id = ' + part.id + '?')) {
-      ingr.parts.splice(ingr.parts.indexOf(part), 1);
-      this.ingredientService.deleteIngredientPart(part.id).subscribe(() => {
-        this.ingredientService.refreshMissingIngredients$.next(true);
-        this.storageService.refreshUsedStorage$.next(true);
-      });
-      let sum = 0;
-      // tslint:disable-next-line:no-unsafe-any
-      for (const partOfIngredient of this.ingredients[this.ingredients.indexOf(ingr)].parts) {
-        // tslint:disable-next-line:no-unsafe-any
-        sum += partOfIngredient.value;
-      }
-      this.ingredients[this.ingredients.indexOf(ingr)].summaryAmount = sum;
-      this.ingredients[this.ingredients.indexOf(ingr)].summaryVolume = sum * this.ingredients[this.ingredients.indexOf(ingr)].volumePerUnit;
-    }
-  }
-
   getErrorMessage() {
     return this._newIngredientPartForm.controls[this.VALUE].hasError('required') ? 'Не может быть пустым' :
       this._newIngredientPartForm.controls[this.VALUE].hasError('notEnoughSpace') ? 'Не хватит места на складе' :
         '';
   }
 
-  openDialog(): void {
+  openDialogDeleteIngredient(ingredient: Ingredient): void {
+    this.ingredientService.isUsedIngredientInDish(ingredient.id).subscribe((isUsed: boolean) => {
+      if (isUsed) {
+        const alertRef = this.dialog.open(AlertDialogComponent, {
+          width: '250px',
+          data: {subject: ingredient.name, message: 'Нельзя удалить используемый в блюде ингредиент'}
+        });
+      } else {
+        const dialogRef = this.dialog.open(DeleteDialogComponent, {
+          width: '250px',
+          data: {subject: ingredient.name, message: 'Вы точно хотите удалить ингредиент'}
+        });
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            this.ingredientService.deleteIngredient(ingredient.id).pipe(catchError(() => {
+              return observableOf([]);
+            })).pipe(
+              switchMap(() => {
+                return this.ingredientService
+                  .getAllIngredients(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+              }),
+              map((data: IngredientApi) => {
+                this.resultsLength = data.totalCount;
+                return data.items;
+              }),
+              catchError(() => {
+                return observableOf([]);
+              })
+            ).subscribe((data: Ingredient[]) => {
+              data.forEach((a: Ingredient) => {
+                let sum = 0;
+                for (const part of a.parts) {
+                  // tslint:disable-next-line:no-unsafe-any
+                  sum += part.value;
+                }
+                a.summaryAmount = sum;
+                a.summaryVolume = sum * a.volumePerUnit;
+              });
+              this.ingredients = data;
+              this.storageService.refreshUsedStorage$.next(true);
+              this.ingredientService.refreshMissingIngredients$.next(true);
+            });
+          }
+        });
+      }
+    });
+  }
+
+  openDialogDeleteIngredientPart(ingr: Ingredient, part: IngredientPart): void {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       width: '250px',
-      data: {subject: 'id'}
+      data: {subject: part.id.toString(), message: 'Вы точно хотите удалить партию с Id = '}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
+      if (result) {
+        ingr.parts.splice(ingr.parts.indexOf(part), 1);
+        this.ingredientService.deleteIngredientPart(part.id).subscribe(() => {
+          this.ingredientService.refreshMissingIngredients$.next(true);
+          this.storageService.refreshUsedStorage$.next(true);
+        });
+        let sum = 0;
+        // tslint:disable-next-line:no-unsafe-any
+        for (const partOfIngredient of this.ingredients[this.ingredients.indexOf(ingr)].parts) {
+          // tslint:disable-next-line:no-unsafe-any
+          sum += partOfIngredient.value;
+        }
+        this.ingredients[this.ingredients.indexOf(ingr)].summaryAmount = sum;
+        this.ingredients[this.ingredients.indexOf(ingr)].summaryVolume = sum *
+          this.ingredients[this.ingredients.indexOf(ingr)].volumePerUnit;
+      }
     });
   }
 }

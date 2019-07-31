@@ -48,6 +48,7 @@ import {HTTP_AUTH_INTERCEPTOR_PROVIDER} from './auth/http.interceptor';
 import {PermitDirective} from './auth/permit.directive';
 import {UserMenuComponent} from './user-menu/user-menu.component';
 import {DeleteDialogComponent} from './dialog/delete.dialog';
+import {AlertDialogComponent} from './dialog/alert.dialog';
 
 
 @NgModule({
@@ -69,6 +70,7 @@ import {DeleteDialogComponent} from './dialog/delete.dialog';
     PermitDirective,
     UserMenuComponent,
     DeleteDialogComponent,
+    AlertDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -101,7 +103,8 @@ import {DeleteDialogComponent} from './dialog/delete.dialog';
 
   ],
   entryComponents: [
-    DeleteDialogComponent
+    DeleteDialogComponent,
+    AlertDialogComponent
   ],
   providers: [
     HTTP_AUTH_INTERCEPTOR_PROVIDER,

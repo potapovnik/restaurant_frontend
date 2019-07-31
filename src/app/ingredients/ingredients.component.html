@@ -30,7 +30,7 @@
     <ng-container matColumnDef="delete">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let ingredient">
-        <button (click)="$event.stopPropagation(); deleteIngredient(ingredient)" mat-flat-button color="warn">
+        <button (click)="$event.stopPropagation(); openDialogDeleteIngredient(ingredient)" mat-flat-button color="warn">
           Удалить
         </button>
       </td>
@@ -62,7 +62,7 @@
               <td>{{part.expirationDate | date:'shortDate'}}</td>
               <td>{{ingredient.volumePerUnit * part.value | number:'1.2-5'}} </td>
               <td>
-                <button (click)="deleteIngPart( ingredient, part)" mat-flat-button color="warn">Удалить</button>
+                <button (click)="openDialogDeleteIngredientPart( ingredient, part)" mat-flat-button color="warn">Удалить</button>
               </td>
             </tr>
             <tr>

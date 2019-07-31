@@ -7,13 +7,12 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-delete-dialog',
-  templateUrl: 'delete.dialog.html',
+  selector: 'app-alert-dialog',
+  templateUrl: 'alert.dialog.html',
 })
-export class DeleteDialogComponent {
+export class AlertDialogComponent {
 
   constructor(
-    public dialogRef: MatDialogRef<DeleteDialogComponent>,
+    public dialogRef: MatDialogRef<AlertDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
-
 }

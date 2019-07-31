@@ -18,7 +18,5 @@
   <button mat-button [disabled]="_loginForm.invalid" color="primary" (click)="handleLoginClick()" class="login">Войти</button>
     </div>
   </div>
-
-  <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
 </ng-container>
-
+<mat-spinner *ngIf="isLoadingResults"></mat-spinner>
