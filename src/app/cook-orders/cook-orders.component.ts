@@ -4,7 +4,7 @@ import {Orders} from '../utils/orders';
 import {OrdersService} from '../utils/orders.service';
 import {HistoryService} from '../utils/history.service';
 import {History} from '../utils/History';
-import {CurrentUserService, UserAuthInfo} from "../auth/currentuser.service";
+import {CurrentUserService, UserAuthInfo} from '../auth/currentuser.service';
 
 @Component({
   selector: 'app-cook-orders',
