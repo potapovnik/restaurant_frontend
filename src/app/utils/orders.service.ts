@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Orders} from './orders';
+import {SocketService} from "../cook-orders/socket.service";
+import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +12,7 @@ export class OrdersService {
   private orders = 'restaurant/orders';
   private head = new HttpHeaders().set('Content-Type', 'application/json');
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,private socket: SocketService) {
   }
 
 
@@ -32,6 +34,7 @@ export class OrdersService {
   }
 
   getAllById(id: number): Observable<Orders[]> {
+    this.socket.onMessage('/restaurant/goodbay').pipe(map(post => alert(post)));
     const url = this.orders + '/allOrdersById/' + id;
     console.log(url + '- get  all order of user: ' + id);
     return this.http.get<Orders[]>(url, {headers: this.head});
